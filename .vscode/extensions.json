@@ -26,6 +26,7 @@
     "zainchen.json",
     "yzhang.markdown-all-in-one",
     "davidanson.vscode-markdownlint",
-    "alefragnani.project-manager"
+    "alefragnani.project-manager",
+    "tsandall.opa"
   ]
 }
