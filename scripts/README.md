@@ -1,5 +1,7 @@
 # `scripts/`
 
+The `scripts/` directory contains various scripts designed to automate and streamline tasks related to system setup, configuration, and teardown across different operating systems.
+
 - [1. Linux](#1-linux)
 - [2. Windows](#2-windows)
 

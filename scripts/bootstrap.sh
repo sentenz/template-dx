@@ -9,7 +9,7 @@ set -uo pipefail
 
 # Include Scripts
 
-source ./../scripts/shell/pkg.sh
+source "$(dirname "${BASH_SOURCE[0]}")/shell/pkg.sh"
 
 # Constant Variables
 
