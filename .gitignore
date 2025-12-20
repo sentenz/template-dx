@@ -1,1 +1,4 @@
 # https://www.toptal.com/developers/gitignore/
+
+logs/
+*.log

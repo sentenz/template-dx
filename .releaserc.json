@@ -2,16 +2,16 @@
   "branches": [
     "main"
   ],
+  "tagFormat": "${version}",
   "plugins": [
-    "@semantic-release/gitlab",
     [
-      "@semantic-release/release-notes-generator",
+      "@semantic-release/commit-analyzer",
       {
         "preset": "conventionalcommits"
       }
     ],
     [
-      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
       {
         "preset": "conventionalcommits"
       }
@@ -27,6 +27,7 @@
       {
         "message": "chore(release): version ${nextRelease.version} [skip ci]"
       }
-    ]
+    ],
+    "@semantic-release/github"
   ]
 }
