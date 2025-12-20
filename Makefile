@@ -37,22 +37,12 @@ endif
 
 # ── Setup & Teardown ─────────────────────────────────────────────────────────────────────────────
 
-# Prompt for credentials and cache them for the current session
-permission:
-ifeq ($(IS_WINDOWS),Windows_NT)
-	@echo "TODO Implement Windows permissions handling"
-else
-	@sudo -v
-endif
-.PHONY: permission
-
 ## Initialize a software development workspace with requisites
 bootstrap:
 ifeq ($(IS_WINDOWS),Windows_NT)
 	$(POWERSHELL) -File ./scripts/Bootstrap.ps1
 else
-	@$(MAKE) -s permission; \
-	cd scripts/ && chmod +x bootstrap.sh && ./bootstrap.sh
+	@cd ./scripts/ && bash ./bootstrap.sh
 endif
 .PHONY: bootstrap
 
@@ -61,8 +51,7 @@ setup:
 ifeq ($(IS_WINDOWS),Windows_NT)
 	@echo "TODO Implement Windows setup task"
 else
-	@$(MAKE) -s permission; \
-	cd scripts/ && chmod +x setup.sh && ./setup.sh
+	@cd ./scripts/ && bash ./setup.sh
 endif
 .PHONY: setup
 
@@ -71,8 +60,7 @@ teardown:
 ifeq ($(IS_WINDOWS),Windows_NT)
 	@echo "TODO Implement Windows teardown task"
 else
-	@$(MAKE) -s permission; \
-	cd scripts/ && chmod +x teardown.sh && ./teardown.sh
+	@cd ./scripts/ && bash ./teardown.sh
 endif
 .PHONY: teardown
 
@@ -96,51 +84,51 @@ else
 endif
 .PHONY: lint-pwsh-analyze
 
-# ── Secret Manager ───────────────────────────────────────────────────────────────────────────────
+# ── Secrets Manager ──────────────────────────────────────────────────────────────────────────────
 
-SOPS_UID ?= sops-dx
+SECRETS_SOPS_UID ?= sops-dx
 
-# Usage: make secret-gpg-generate SOPS_UID=<uid>
+# Usage: make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
 #
 ## Generate a new GPG key pair for SOPS
-secret-gpg-generate:
-	@gpg --batch --quiet --passphrase '' --quick-generate-key "$(SOPS_UID)" ed25519 cert,sign 0
-	@NEW_FPR="$$(gpg --list-keys --with-colons "$(SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"
+secrets-gpg-generate:
+	@gpg --batch --quiet --passphrase '' --quick-generate-key "$(SECRETS_SOPS_UID)" ed25519 cert,sign 0
+	@NEW_FPR="$$(gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"
 	@gpg --batch --quiet --passphrase '' --quick-add-key "$${NEW_FPR}" cv25519 encrypt 0
-.PHONY: secret-gpg-generate
+.PHONY: secrets-gpg-generate
 
-# Usage: make secret-gpg-show SOPS_UID=<uid>
+# Usage: make secrets-gpg-show SECRETS_SOPS_UID=<uid>
 #
 ## Print the GPG key fingerprint for SOPS (.sops.yaml)
-secret-gpg-show:
-	@FPR="$$(gpg --list-keys --with-colons "$(SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"; \
+secrets-gpg-show:
+	@FPR="$$(gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"; \
 	if [ -z "$${FPR}" ]; then \
-		echo "error: no fingerprint found for UID '$(SOPS_UID)'" >&2; \
+		echo "error: no fingerprint found for UID '$(SECRETS_SOPS_UID)'" >&2; \
 		exit 1; \
 	fi; \
-	echo -e "UID: $(SOPS_UID)\nFingerprint: $${FPR}"
-.PHONY: secret-gpg-show
+	echo -e "UID: $(SECRETS_SOPS_UID)\nFingerprint: $${FPR}"
+.PHONY: secrets-gpg-show
 
-# Usage: make secret-gpg-remove SOPS_UID=<uid>
+# Usage: make secrets-gpg-remove SECRETS_SOPS_UID=<uid>
 #
 ## Remove an existing GPG key for SOPS (interactive)
-secret-gpg-remove:
-	if ! gpg --list-keys "$(SOPS_UID)" >/dev/null 2>&1; then
-		echo "warning: no key found for '$(SOPS_UID)'" >&2
+secrets-gpg-remove:
+	if ! gpg --list-keys "$(SECRETS_SOPS_UID)" >/dev/null 2>&1; then
+		echo "warning: no key found for '$(SECRETS_SOPS_UID)'" >&2
 		exit 0
 	fi
-	echo "info: deleting key for '$(SOPS_UID)'"
+	echo "info: deleting key for '$(SECRETS_SOPS_UID)'"
 	# Delete private key first, then public key
-	gpg --yes --delete-secret-keys "$(SOPS_UID)"
-	gpg --yes --delete-keys "$(SOPS_UID)"
-.PHONY: secret-gpg-remove
+	gpg --yes --delete-secret-keys "$(SECRETS_SOPS_UID)"
+	gpg --yes --delete-keys "$(SECRETS_SOPS_UID)"
+.PHONY: secrets-gpg-remove
 
-# Usage: make secret-sops-encrypt <files>
+# Usage: make secrets-sops-encrypt <files>
 #
 ## Encrypt file using SOPS
-secret-sops-encrypt:
+secrets-sops-encrypt:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make secret-sops-encrypt <files>"; \
+		echo "usage: make secrets-sops-encrypt <files>"; \
 		exit 1; \
 	fi
 
@@ -152,14 +140,14 @@ secret-sops-encrypt:
 			echo "Skipping (not found): $$file" >&2; \
 		fi; \
 	done
-.PHONY: secret-sops-encrypt
+.PHONY: secrets-sops-encrypt
 
-# Usage: make secret-sops-decrypt <files>
+# Usage: make secrets-sops-decrypt <files>
 #
 ## Decrypt file using SOPS
-secret-sops-decrypt:
+secrets-sops-decrypt:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make secret-sops-encrypt <files>"; \
+		echo "usage: make secrets-sops-encrypt <files>"; \
 		exit 1; \
 	fi
 
@@ -171,17 +159,52 @@ secret-sops-decrypt:
 			echo "Skipping (not found): $$file" >&2; \
 		fi; \
 	done
-.PHONY: secret-sops-decrypt
+.PHONY: secrets-sops-decrypt
 
-# Usage: make secret-sops-view <file>
+# Usage: make secrets-sops-view <file>
 #
 ## View a file encrypted with SOPS
-secret-sops-view:
+secrets-sops-view:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make secret-sops-view <file>"; \
+		echo "usage: make secrets-sops-view <file>"; \
 		exit 1; \
 	fi
 
 	export PATH="$$PATH:$(shell go env GOPATH 2>/dev/null)/bin"
 	sops --decrypt "$(filter-out $@,$(MAKECMDGOALS))"
-.PHONY: secret-sops-view
+.PHONY: secrets-sops-view
+
+# ── Policy Manager ───────────────────────────────────────────────────────────────────────────────
+
+POLICY_IMAGE_CONFTEST ?= openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525
+
+# Usage: make policy-analysis-conftest <filepath>
+#
+## Analyze configuration files using Conftest for policy violations and generate a report
+policy-analysis-conftest:
+	@mkdir -p logs/policy
+
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make policy-analysis-conftest <filepath>"; \
+		exit 1; \
+	fi
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_CONFTEST)" test "$(filter-out $@,$(MAKECMDGOALS))" > logs/policy/conftest.json 2>&1
+.PHONY: policy-analysis-conftest
+
+POLICY_IMAGE_REGAL ?= ghcr.io/openpolicyagent/regal:0.37.0@sha256:a09884658f3c8c9cc30de136b664b3afdb7927712927184ba891a155a9676050
+
+# Usage: make policy-lint-regal <filepath>
+#
+## Lint Rego policies using Regal and generate a report
+policy-lint-regal:
+	@mkdir -p logs/analysis
+
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make policy-lint-regal"; \
+		exit 1; \
+	fi
+
+	docker pull "$(POLICY_IMAGE_REGAL)"
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" regal lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/analysis/regal.json 2>&1
+.PHONY: policy-lint-regal
