@@ -18,16 +18,16 @@ workflow:
     on_job_failure: all
 
 include:
-  - component: $CI_SERVER_FQDN/ci-cd/analysis/semgrep@~latest
+  - component: $CI_SERVER_FQDN/ci-cd/analysis/semgrep@v1.0.0
     inputs:
       allow_failure: true
 
-  - component: $CI_SERVER_FQDN/ci-cd/analysis/gitleaks@~latest
+  - component: $CI_SERVER_FQDN/ci-cd/analysis/gitleaks@v1.0.0
 
-  - component: $CI_SERVER_FQDN/ci-cd/analysis/conftest@~latest
+  - component: $CI_SERVER_FQDN/ci-cd/analysis/conftest@v1.0.0
 
-  - component: $CI_SERVER_FQDN/ci-cd/manager/renovate@~latest
+  - component: $CI_SERVER_FQDN/ci-cd/manager/renovate@v1.0.0
     inputs:
       schedule: "only"
 
-  - component: $CI_SERVER_FQDN/ci-cd/manager/semantic-release@~latest
+  - component: $CI_SERVER_FQDN/ci-cd/manager/semantic-release@v1.0.0
