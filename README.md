@@ -43,11 +43,11 @@ A comprehensive development experience (DX) template repository that provides a 
 #### 2.1.1. Make
 
 - [Makefile](Makefile)
-  > The Makefile serves as the task runner.
+  > Makefile defining tasks for building, testing, and managing the project.
 
   > [!NOTE]
-  > - Run the `make help` command in the terminal to list the tasks used for the project.
-  > - Targets **must** have a leading comment line starting with `##` to be included in the task list.
+  > - Run `make help` in the terminal to list the project tasks.
+  > - Each task description must begin with `##` to be included in the task list.
 
   ```plaintext
   $ make help
@@ -58,9 +58,9 @@ A comprehensive development experience (DX) template repository that provides a 
   Usage
           make <task>
 
-          bootstrap                Initialize a software development workspace with requisites
-          setup                    Install and configure all dependencies essential for development
-          teardown                 Remove development artifacts and restore the host to its pre-setup state
+          bootstrap         Initialize a software development workspace with requisites
+          setup             Install and configure all dependencies essential for development
+          teardown          Remove development artifacts and restore the host to its pre-setup state
   ```
 
 ### 2.2. Bootstrap
