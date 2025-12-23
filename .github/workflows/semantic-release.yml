@@ -1,23 +1,37 @@
+# SPDX-License-Identifier: Apache-2.0
+
 name: Semantic-Release
 
 on:
   push:
     branches:
       - main
+      - next
+      - beta
+      - alpha
 
 jobs:
   semantic-release:
+    name: Semantic-Release Action
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
       pull-requests: write
       id-token: write
+    outputs:
+      new-release-published: ${{ steps.release.outputs.new-release-published }}
+      new-release-version: ${{ steps.release.outputs.new-release-version }}
     steps:
-      - uses: actions/checkout@v6.0.1
+      - name: Checkout (full history)
+        uses: actions/checkout@v6.0.1
         with:
           fetch-depth: 0
-      - name: Semantic Release
-        uses: sentenz/actions/semantic-release@v1.0.2
+          persist-credentials: true
+
+      - name: Run Semantic Release
+        id: release
+        uses: sentenz/actions/semantic-release@1.0.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          semantic-version: "latest"

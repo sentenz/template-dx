@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 name: Conftest
 
 on:
@@ -8,10 +10,13 @@ on:
 
 jobs:
   conftest:
+    name: Conftest Action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.1
-      - name: Conftest
-        uses: sentenz/actions/conftest@v1.0.3
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Run Conftest
+        uses: sentenz/actions/conftest@1.0.4
         with:
-          config-file: conftest.toml
+          policy-path: "./tests/policy"

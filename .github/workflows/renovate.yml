@@ -1,12 +1,16 @@
+# SPDX-License-Identifier: Apache-2.0
+
 name: Renovate
 
 on:
-  schedule:
-    - cron: "0 3 * * 1"
   workflow_dispatch:
+  schedule:
+    # Run weekly on Sundays at 4:00 AM UTC
+    - cron: "0 4 * * 0"
 
 jobs:
   renovate:
+    name: Renovate Action
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -15,8 +19,12 @@ jobs:
       checks: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6.0.1
-      - name: Renovate
-        uses: sentenz/actions/renovate@v1.0.2
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Run Renovate
+        uses: sentenz/actions/renovate@1.0.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          autodiscover: "true"
+          log-level: "info"
