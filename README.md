@@ -107,7 +107,7 @@ A comprehensive development experience (DX) template repository that provides a 
 - CI/CD
 
   ```yaml
-  # TODO
+  uses: sentenz/actions/semantic-release@latest
   ```
 
 ### 2.5. Update Manager
@@ -121,7 +121,7 @@ A comprehensive development experience (DX) template repository that provides a 
 - CI/CD
 
   ```yaml
-  # TODO
+  uses: sentenz/actions/renovate@latest
   ```
 
 ### 2.6. Secrets Manager
@@ -205,7 +205,11 @@ A comprehensive development experience (DX) template repository that provides a 
 - CI/CD
 
   ```yaml
-  # TODO
+  uses: sentenz/actions/regal@latest
+  ```
+
+  ```yaml
+  uses: sentenz/actions/conftest@latest
   ```
 
 - Tasks
