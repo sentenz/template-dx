@@ -12,5 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.1
       - name: Conftest
-        run: |
-          docker run --rm -v "${PWD}:/workspace" -w /workspace openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525 test .
+        uses: sentenz/actions/conftest@v1.0.3
+        with:
+          config-file: conftest.toml
