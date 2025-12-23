@@ -69,32 +69,52 @@ A comprehensive development experience (DX) template repository that provides a 
 
 [scripts/](scripts/README.md) provides scripts to bootstrap, setup, and teardown a software development workspace with requisites.
 
-- Tasks
+1. Insights and Details
 
-  ```bash
-  make bootstrap
-  ```
+    - [bootstrap.sh](scripts/bootstrap.sh)
+      > Initializes a software development workspace with requisites.
 
-  ```bash
-  make setup
-  ```
+    - [setup.sh](scripts/setup.sh)
+      > Installs and configures all dependencies essential for development.
 
-  ```bash
-  make teardown
-  ```
+    - [teardown.sh](scripts/teardown.sh)
+      > Removes development artifacts and restores the host to its pre-setup state.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      make bootstrap
+      ```
+
+      ```bash
+      make setup
+      ```
+
+      ```bash
+      make teardown
+      ```
 
 ### 2.3. Dev Containers
 
 [.devcontainer/](.devcontainer/README.md) provides Dev Containers as a consistent development environment using Docker containers.
 
-- Tasks
+1. Insights and Details
 
-  ```bash
-  # TODO
-  # make devcontainer-go
-  # make devcontainer-cpp
-  # make devcontainer-python
-  ```
+    - [go/](.devcontainer/go/)
+      > Dev Container configuration for Go development environment.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      # TODO
+      # make devcontainer-go
+      # make devcontainer-cpp
+      # make devcontainer-python
+      ```
 
 ### 2.4. Release Manager
 
@@ -102,13 +122,18 @@ A comprehensive development experience (DX) template repository that provides a 
 
 [Semantic-Release](https://github.com/semantic-release/semantic-release) automates the release process by analyzing commit messages to determine the next version number, generating changelog and release notes, and publishing the release.
 
-[.releaserc.json](.releaserc.json) configuration file for Semantic-Release specifying release rules and plugins.
+1. Insights and Details
 
-- CI/CD
+    - [.releaserc.json](.releaserc.json)
+      > Configuration file for Semantic-Release specifying release rules and plugins.
 
-  ```yaml
-  uses: sentenz/actions/semantic-release@latest
-  ```
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/semantic-release@latest
+      ```
 
 ### 2.5. Update Manager
 
@@ -116,13 +141,18 @@ A comprehensive development experience (DX) template repository that provides a 
 
 [Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, ensuring that projects stay up-to-date with the latest versions of libraries and packages.
 
-[renovate.json](renovate.json) configuration file for Renovate specifying update rules and schedules.
+1. Insights and Details
 
-- CI/CD
+    - [renovate.json](renovate.json)
+      > Configuration file for Renovate specifying update rules and schedules.
 
-  ```yaml
-  uses: sentenz/actions/renovate@latest
-  ```
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/renovate@latest
+      ```
 
 ### 2.6. Secrets Manager
 
@@ -130,49 +160,54 @@ A comprehensive development experience (DX) template repository that provides a 
 
 [SOPS (Secrets OPerationS)](https://github.com/getsops/sops) is a tool for managing and encrypting sensitive data such as passwords, API keys, and other secrets.
 
-[.sops.yaml](.sops.yaml) configuration file for SOPS specifying encryption rules and key management.
-
-1. GPG Key Pair Generation
-
-    - Tasks
-      > Generate a new key pair to be used with SOPS.
-
-      > [!NOTE]
-      > The UID can be customized via the `SECRETS_SOPS_UID` variable (defaults to `sops-dx`).
-
-      ```bash
-      make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
-      ```
-
-2. GPG Public Key Fingerprint
-
-    - Tasks
-      > Print the  GPG Public Key fingerprint associated with a given UID.
-
-      ```bash
-      make secrets-gpg-show SECRETS_SOPS_UID=<uid>
-      ```
+1. Insights and Details
 
     - [.sops.yaml](.sops.yaml)
-      > The GPG UID is required for populating in `.sops.yaml`.
+      > Configuration file for SOPS specifying encryption rules and key management.
 
-      ```yaml
-      creation_rules:
-        - pgp: "<fingerprint>" # <uid>
-      ```
+2. Usage and Instructions
 
-3. SOPS Encrypt/Decrypt
+    - GPG Key Pair Generation
 
-    - Tasks
-      > Encrypt/decrypt one or more files in place using SOPS.
+      - Tasks
+        > Generate a new key pair to be used with SOPS.
 
-      ```bash
-      make secrets-sops-encrypt <files>
-      ```
+        > [!NOTE]
+        > The UID can be customized via the `SECRETS_SOPS_UID` variable (defaults to `sops-dx`).
 
-      ```bash
-      make secrets-sops-decrypt <files>
-      ```
+        ```bash
+        make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
+        ```
+
+    - GPG Public Key Fingerprint
+
+      - Tasks
+        > Print the  GPG Public Key fingerprint associated with a given UID.
+
+        ```bash
+        make secrets-gpg-show SECRETS_SOPS_UID=<uid>
+        ```
+
+      - [.sops.yaml](.sops.yaml)
+        > The GPG UID is required for populating in `.sops.yaml`.
+
+        ```yaml
+        creation_rules:
+          - pgp: "<fingerprint>" # <uid>
+        ```
+
+    - SOPS Encrypt/Decrypt
+
+      - Tasks
+        > Encrypt/decrypt one or more files in place using SOPS.
+
+        ```bash
+        make secrets-sops-encrypt <files>
+        ```
+
+        ```bash
+        make secrets-sops-decrypt <files>
+        ```
 
 ### 2.7. Container Manager
 
@@ -180,17 +215,24 @@ A comprehensive development experience (DX) template repository that provides a 
 
 [Docker](https://github.com/docker) containerization tool to run applications in isolated container environments and execute container-based tasks.
 
-- CI/CD
+1. Insights and Details
 
-  ```yaml
-  # TODO
-  ```
+    - [Dockerfile](Dockerfile)
+      > Dockerfile defining the container image for the project.
 
-- Tasks
+2. Usage and Instructions
 
-  ```bash
-  # TODO
-  ```
+    - CI/CD
+
+      ```yaml
+      # TODO
+      ```
+
+    - Tasks
+
+      ```bash
+      # TODO
+      ```
 
 ### 2.8. Policy Manager
 
@@ -198,29 +240,35 @@ A comprehensive development experience (DX) template repository that provides a 
 
 [Conftest](https://www.conftest.dev/) is a **Policy as Code (PaC)** tool to streamline policy management for improved development, security and audit capability.
 
-[conftest.toml](conftest.toml) configuration file for Conftest specifying policy paths and output formats.
+1. Insights and Details
 
-[tests/policy](tests/policy/) directory contains Rego policies for Conftest to enforce best practices and compliance standards.
+    - [conftest.toml](conftest.toml)
+      > Configuration file for Conftest specifying policy paths and output formats.
 
-- CI/CD
+    - [tests/policy](tests/policy/)
+      > Directory contains Rego policies for Conftest to enforce best practices and compliance standards.
 
-  ```yaml
-  uses: sentenz/actions/regal@latest
-  ```
+2. Usage and Instructions
 
-  ```yaml
-  uses: sentenz/actions/conftest@latest
-  ```
+    - CI/CD
 
-- Tasks
+      ```yaml
+      uses: sentenz/actions/regal@latest
+      ```
 
-  ```bash
-  make policy-lint-regal <filepath>
-  ```
+      ```yaml
+      uses: sentenz/actions/conftest@latest
+      ```
 
-  ```bash
-  make policy-analysis-conftest <filepath>
-  ```
+    - Tasks
+
+      ```bash
+      make policy-lint-regal <filepath>
+      ```
+
+      ```bash
+      make policy-analysis-conftest <filepath>
+      ```
 
 ## 3. Troubleshoot
 
