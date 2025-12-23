@@ -5,9 +5,8 @@ jobs:
   lint-rego:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: open-policy-agent/setup-regal@v1.0.0
-        with:
-          version: latest
+      - uses: actions/checkout@v6.0.1
       - name: Lint
-        run: regal lint --format=github ./tests/policy
+        uses: sentenz/actions/regal@v1.0.2
+        with:
+          path: ./tests/policy

@@ -14,5 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.1
       - name: Semgrep
-        run: |
-          docker run --rm -v "${PWD}:/src" semgrep/semgrep:1.145.2@sha256:791a85e244b61e83ef96364997fd069f33e78ce2c4b5541d7bee22f07ee117c9 semgrep scan --config=auto
+        uses: sentenz/actions/semgrep@v1.0.2
+        with:
+          config: auto
