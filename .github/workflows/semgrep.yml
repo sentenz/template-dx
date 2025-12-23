@@ -17,3 +17,4 @@ jobs:
         uses: sentenz/actions/semgrep@v1.0.2
         with:
           config: auto
+          metrics: auto
