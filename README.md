@@ -6,7 +6,7 @@ A comprehensive development experience (DX) template repository that provides a 
 
 - [1. Details](#1-details)
   - [1.1. Prerequisites](#11-prerequisites)
-- [2. Usage](#2-usage)
+- [2. Developer Guide](#2-developer-guide)
   - [2.1. Task Runner](#21-task-runner)
     - [2.1.1. Make](#211-make)
   - [2.2. Bootstrap](#22-bootstrap)
@@ -36,7 +36,7 @@ A comprehensive development experience (DX) template repository that provides a 
 - [Docker](https://www.docker.com/)
   > Containerization tool to run applications in isolated container environments and execute container-based tasks.
 
-## 2. Usage
+## 2. Developer Guide
 
 ### 2.1. Task Runner
 
