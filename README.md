@@ -1,6 +1,11 @@
 # Template DX
 
-[![License](https://img.shields.io/github/license/sentenz/percent)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg)](https://semantic-release.gitbook.io/semantic-release/)
+[![Renovate Enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
+[![Docker](https://img.shields.io/badge/docker-enabled-brightgreen.svg)](https://www.docker.com/)
+[![SOPS Enabled](https://img.shields.io/badge/sops-enabled-brightgreen.svg)](https://github.com/mozilla/sops)
+[![Conftest Enabled](https://img.shields.io/badge/conftest-enabled-brightgreen.svg)](https://www.conftest.dev/)
 
 A comprehensive development experience (DX) template repository that provides a structured framework and essential tools to streamline the software development process.
 
@@ -37,6 +42,8 @@ A comprehensive development experience (DX) template repository that provides a 
   > Containerization tool to run applications in isolated container environments and execute container-based tasks.
 
 ## 2. Contribute
+
+Contribution guidelines and project management tools.
 
 ### 2.1. Task Runner
 
@@ -104,6 +111,15 @@ A comprehensive development experience (DX) template repository that provides a 
 
     - [go/](.devcontainer/go/)
       > Dev Container configuration for Go development environment.
+
+      ```json
+      // ...
+      "postCreateCommand": "sudo make bootstrap && sudo make setup",
+      // ...
+      ```
+
+      > [!NOTE]
+      > The `devcontainer.json` runs the `bootstrap` and `setup` scripts to initialize and configure the development environment.
 
 2. Usage and Instructions
 
