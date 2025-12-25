@@ -119,7 +119,7 @@ Contribution guidelines and project management tools.
       ```
 
       > [!NOTE]
-      > The `devcontainer.json` runs the `bootstrap` and `setup` scripts to initialize and configure the development environment.
+      > The `devcontainer.json` runs the `bootstrap` and `setup` tasks to initialize and configure the development environment.
 
 2. Usage and Instructions
 
