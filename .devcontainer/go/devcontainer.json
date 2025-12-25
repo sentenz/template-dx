@@ -29,12 +29,12 @@
       "ppa": "false"
     }
   },
-	"capAdd": [
-		"SYS_PTRACE"
-	],
-	"securityOpt": [
-		"seccomp=unconfined"
-	],
+  "capAdd": [
+    "SYS_PTRACE"
+  ],
+  "securityOpt": [
+    "seccomp=unconfined"
+  ],
   // Configure tool-specific properties.
   "customizations": {
     // Configure properties specific to VS Code.
