@@ -49,26 +49,37 @@ Contribution guidelines and project management tools.
 
 #### 2.1.1. Make
 
-- [Makefile](Makefile)
-  > Makefile defining tasks for building, testing, and managing the project.
+[Make](https://www.gnu.org/software/make/) is a automation tool that defines and manages tasks to streamline development workflows.
 
-  > [!NOTE]
-  > - Run `make help` in the terminal to list the project tasks.
-  > - Each task description must begin with `##` to be included in the task list.
+1. Insights and Details
 
-  ```plaintext
-  $ make help
+    - [Makefile](Makefile)
+      > Makefile defining tasks for building, testing, and managing the project.
 
-  Tasks
-          A collection of tasks used in the current project.
+2. Usage and Instructions
 
-  Usage
-          make <task>
+    - Tasks
 
-          bootstrap         Initialize a software development workspace with requisites
-          setup             Install and configure all dependencies essential for development
-          teardown          Remove development artifacts and restore the host to its pre-setup state
-  ```
+      ```bash
+      make help
+      ```
+
+      > [!NOTE]
+      > - Each task description must begin with `##` to be included in the task list.
+
+      ```plaintext
+      $ make help
+
+      Tasks
+              A collection of tasks used in the current project.
+
+      Usage
+              make <task>
+
+              bootstrap         Initialize a software development workspace with requisites
+              setup             Install and configure all dependencies essential for development
+              teardown          Remove development artifacts and restore the host to its pre-setup state
+      ```
 
 ### 2.2. Bootstrap
 
