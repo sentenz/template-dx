@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.1.0](https://github.com/sentenz/template-dx/compare/1.0.0...1.1.0) (2025-12-28)
+
+
+### Features
+
+* add Trivy for SAST tasks to Makefile ([4b9e069](https://github.com/sentenz/template-dx/commit/4b9e069892a8d88c19701cea0d0b24a181ff0835))
+
 # 1.0.0 (2025-12-20)
 
 
