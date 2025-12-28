@@ -1,11 +1,6 @@
 # Template DX
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg)](https://semantic-release.gitbook.io/semantic-release/)
-[![Renovate Enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
-[![Docker](https://img.shields.io/badge/docker-enabled-brightgreen.svg)](https://www.docker.com/)
-[![SOPS Enabled](https://img.shields.io/badge/sops-enabled-brightgreen.svg)](https://github.com/mozilla/sops)
-[![Conftest Enabled](https://img.shields.io/badge/conftest-enabled-brightgreen.svg)](https://www.conftest.dev/)
 
 A comprehensive development experience (DX) template repository that provides a structured framework and essential tools to streamline the software development process.
 
@@ -21,12 +16,15 @@ A comprehensive development experience (DX) template repository that provides a 
     - [2.4.1. Semantic-Release](#241-semantic-release)
   - [2.5. Update Manager](#25-update-manager)
     - [2.5.1. Renovate](#251-renovate)
+    - [2.5.2. Dependabot](#252-dependabot)
   - [2.6. Secrets Manager](#26-secrets-manager)
     - [2.6.1. SOPS](#261-sops)
   - [2.7. Container Manager](#27-container-manager)
     - [2.7.1. Docker](#271-docker)
   - [2.8. Policy Manager](#28-policy-manager)
     - [2.8.1. Conftest](#281-conftest)
+  - [2.9. Supply Chain Security Manager](#29-supply-chain-security-manager)
+    - [2.9.1. Trivy](#291-trivy)
 - [3. Troubleshoot](#3-troubleshoot)
   - [3.1. TODO](#31-todo)
 - [4. References](#4-references)
@@ -181,6 +179,15 @@ Contribution guidelines and project management tools.
       uses: sentenz/actions/renovate@latest
       ```
 
+#### 2.5.2. Dependabot
+
+[Dependabot](https://github.com/dependabot/dependabot-core) automates dependency updates by creating pull requests for outdated dependencies, libraries and packages.
+
+1. Insights and Details
+
+    - [.github/dependabot.yml](.github/dependabot.yml)
+      > Configuration file for Dependabot specifying update rules and schedules.
+
 ### 2.6. Secrets Manager
 
 #### 2.6.1. SOPS
@@ -295,6 +302,46 @@ Contribution guidelines and project management tools.
 
       ```bash
       make policy-analysis-conftest <filepath>
+      ```
+
+### 2.9. Supply Chain Security Manager
+
+#### 2.9.1. Trivy
+
+[Trivy](https://github.com/aquasecurity/trivy) is a comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues in container images, filesystems, and source code.
+
+1. Insights and Details
+
+    - [trivy.yaml](trivy.yaml)
+      > Configuration file for Trivy specifying scan settings and options.
+
+    - [.trivyignore](.trivyignore)
+      > File specifying vulnerabilities to ignore during Trivy scans.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/trivy@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make sast-trivy-fs <path>
+      ```
+
+      ```bash
+      make sast-trivy-sbom-cyclonedx-fs <path>
+      ```
+
+      ```bash
+      make sast-trivy-sbom <sbom_path>
+      ```
+
+      ```bash
+      make sast-trivy-sbom-license <sbom_path>
       ```
 
 ## 3. Troubleshoot
