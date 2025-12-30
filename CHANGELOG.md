@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.3.0](https://github.com/sentenz/template-dx/compare/1.2.0...1.3.0) (2025-12-30)
+
+
+### Features
+
+* update semantic-release workflow to publish SBOM to release notes ([72b02d8](https://github.com/sentenz/template-dx/commit/72b02d870f311af18c26846a68cf9d74e613ec53))
+
 # [1.2.0](https://github.com/sentenz/template-dx/compare/1.1.0...1.2.0) (2025-12-30)
 
 
