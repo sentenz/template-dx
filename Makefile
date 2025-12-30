@@ -212,6 +212,7 @@ policy-lint-regal:
 # ── SAST Manager ─────────────────────────────────────────────────────────────────────────────────
 
 SAST_IMAGE_TRIVY ?= aquasec/trivy:0.68.2@sha256:05d0126976bdedcd0782a0336f77832dbea1c81b9cc5e4b3a5ea5d2ec863aca7
+SAST_IMAGE_COSIGN ?= cgr.dev/chainguard/cosign:3.0.0@sha256:b6bc266358e9368be1b3d01fca889b78d5ad5a47832986e14640c34a237ef638
 
 ## Scan Infrastructure-as-Code (IaC) files for misconfigurations using Trivy and generate a report
 sast-trivy-misconfig:
@@ -283,19 +284,19 @@ sast-trivy-rootfs:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" rootfs --output logs/sast/trivy-rootfs.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-rootfs
 
-# Usage: make sast-trivy-sbom <sbom_path>
+# Usage: make sast-trivy-sbom-scan <sbom_path>
 #
 ## Scan SBOM for vulnerabilities using Trivy
-sast-trivy-sbom:
+sast-trivy-sbom-scan:
 	@mkdir -p logs/sast
 
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make sast-trivy-sbom <sbom_path>"; \
+		echo "usage: make sast-trivy-sbom-scan <sbom_path>"; \
 		exit 1; \
 	fi
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" sbom --output logs/sast/trivy-sbom.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
-.PHONY: sast-trivy-sbom
+.PHONY: sast-trivy-sbom-scan
 
 # Usage: make sast-trivy-sbom-cyclonedx-image <image_name>
 #
@@ -378,3 +379,45 @@ sast-trivy-kubernetes:
 	docker run --rm -v "${HOME}/.kube/config:/root/.kube/config" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" kubernetes --output logs/sast/trivy-kubernetes.json $(if $(filter-out $@,$(MAKECMDGOALS)),$(filter-out $@,$(MAKECMDGOALS)),cluster) 2>&1
 .PHONY: sast-trivy-kubernetes
 
+## Generate Cosign key pair
+sast-cosign-generate-key-pair:
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_COSIGN)" generate-key-pair
+.PHONY: sast-cosign-generate-key-pair
+
+# Usage: make sast-cosign-attest <image_name>
+#
+## Attest an image with the generated SBOM using Cosign
+sast-cosign-attest:
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make sast-cosign-attest <image_name>"; \
+		exit 1; \
+	fi
+	@if [ ! -f cosign.key ]; then \
+		echo "Error: cosign.key not found. Run 'make sast-cosign-generate-key-pair' first."; \
+		exit 1; \
+	fi
+	@if [ ! -f logs/sbom/sbom.cdx.json ]; then \
+		echo "Error: logs/sbom/sbom.cdx.json not found. Run 'make sast-trivy-sbom-cyclonedx <image_name>' first."; \
+		exit 1; \
+	fi
+
+	docker run --rm -v "${HOME}/.docker/config.json:/root/.docker/config.json" -v "${PWD}:/workspace" -w /workspace -e COSIGN_PASSWORD "$(SAST_IMAGE_COSIGN)" attest --key cosign.key --type cyclonedx --predicate logs/sbom/sbom.cdx.json "$(filter-out $@,$(MAKECMDGOALS))"
+.PHONY: sast-cosign-attest
+
+# Usage: make sast-cosign-verify <image_name>
+#
+## Verify SBOM attestation for an image using Cosign
+sast-cosign-verify:
+	@mkdir -p logs/sast
+
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "usage: make sast-cosign-verify <image_name>"; \
+		exit 1; \
+	fi
+	@if [ ! -f cosign.pub ]; then \
+		echo "Error: cosign.pub not found. Run 'make sast-cosign-generate-key-pair' first."; \
+		exit 1; \
+	fi
+
+	docker run --rm -v "${HOME}/.docker/config.json:/root/.docker/config.json" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_COSIGN)" verify-attestation --key cosign.pub --type cyclonedx "$(filter-out $@,$(MAKECMDGOALS))" > logs/sbom/sbom.cdx.intoto.jsonl 2> logs/sast/cosign-verify.log
+.PHONY: sast-cosign-verify
