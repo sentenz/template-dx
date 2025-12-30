@@ -164,7 +164,7 @@ Contribution guidelines and project management tools.
 
 #### 2.5.1. Renovate
 
-[Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, ensuring that projects stay up-to-date with the latest versions of libraries and packages.
+[Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, libraries and packages.
 
 1. Insights and Details
 
@@ -337,7 +337,7 @@ Contribution guidelines and project management tools.
       ```
 
       ```bash
-      make sast-trivy-sbom <sbom_path>
+      make sast-trivy-sbom-scan <sbom_path>
       ```
 
       ```bash
@@ -352,6 +352,6 @@ TODO
 
 ## 4. References
 
-- GitHub [Template DX](https://github.com/sentenz/template-dx) repository.
+- Sentenz [Template DX](https://github.com/sentenz/template-dx) repository.
 - Sentenz [Actions](https://github.com/sentenz/actions) repository.
 - Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
