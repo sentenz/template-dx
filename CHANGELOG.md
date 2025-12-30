@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.2.0](https://github.com/sentenz/template-dx/compare/1.1.0...1.2.0) (2025-12-30)
+
+
+### Features
+
+* add Trivy GitHub Actions workflow for security scanning and SBOM generation ([40af1f9](https://github.com/sentenz/template-dx/commit/40af1f99ecf83a68907d1f85de3478a19bff89b2))
+
 # [1.1.0](https://github.com/sentenz/template-dx/compare/1.0.0...1.1.0) (2025-12-28)
 
 
