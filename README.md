@@ -23,7 +23,7 @@ A comprehensive development experience (DX) template repository that provides a 
     - [2.7.1. Docker](#271-docker)
   - [2.8. Policy Manager](#28-policy-manager)
     - [2.8.1. Conftest](#281-conftest)
-  - [2.9. Supply Chain Security Manager](#29-supply-chain-security-manager)
+  - [2.9. Supply Chain Manager](#29-supply-chain-manager)
     - [2.9.1. Trivy](#291-trivy)
 - [3. Troubleshoot](#3-troubleshoot)
   - [3.1. TODO](#31-todo)
@@ -304,7 +304,7 @@ Contribution guidelines and project management tools.
       make policy-analysis-conftest <filepath>
       ```
 
-### 2.9. Supply Chain Security Manager
+### 2.9. Supply Chain Manager
 
 #### 2.9.1. Trivy
 
@@ -353,4 +353,5 @@ TODO
 ## 4. References
 
 - GitHub [Template DX](https://github.com/sentenz/template-dx) repository.
+- Sentenz [Actions](https://github.com/sentenz/actions) repository.
 - Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
