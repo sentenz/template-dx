@@ -2,29 +2,30 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A comprehensive development experience (DX) template repository that provides a structured framework and essential tools to streamline the software development process.
+A comprehensive Development Experience (DX) template repository that provides a structured framework and essential tools to streamline the software development process.
 
 - [1. Details](#1-details)
   - [1.1. Prerequisites](#11-prerequisites)
 - [2. Contribute](#2-contribute)
-  - [2.1. Task Runner](#21-task-runner)
-    - [2.1.1. Make](#211-make)
-  - [2.2. Bootstrap](#22-bootstrap)
-    - [2.2.1. Scripts](#221-scripts)
-  - [2.3. Dev Containers](#23-dev-containers)
-  - [2.4. Release Manager](#24-release-manager)
-    - [2.4.1. Semantic-Release](#241-semantic-release)
-  - [2.5. Update Manager](#25-update-manager)
-    - [2.5.1. Renovate](#251-renovate)
-    - [2.5.2. Dependabot](#252-dependabot)
-  - [2.6. Secrets Manager](#26-secrets-manager)
-    - [2.6.1. SOPS](#261-sops)
-  - [2.7. Container Manager](#27-container-manager)
-    - [2.7.1. Docker](#271-docker)
-  - [2.8. Policy Manager](#28-policy-manager)
-    - [2.8.1. Conftest](#281-conftest)
-  - [2.9. Supply Chain Manager](#29-supply-chain-manager)
-    - [2.9.1. Trivy](#291-trivy)
+  - [2.1. AI Agents](#21-ai-agents)
+  - [2.2. Task Runner](#22-task-runner)
+    - [2.2.1. Make](#221-make)
+  - [2.3. Bootstrap](#23-bootstrap)
+    - [2.3.1. Scripts](#231-scripts)
+  - [2.4. Dev Containers](#24-dev-containers)
+  - [2.5. Release Manager](#25-release-manager)
+    - [2.5.1. Semantic-Release](#251-semantic-release)
+  - [2.6. Update Manager](#26-update-manager)
+    - [2.6.1. Renovate](#261-renovate)
+    - [2.6.2. Dependabot](#262-dependabot)
+  - [2.7. Secrets Manager](#27-secrets-manager)
+    - [2.7.1. SOPS](#271-sops)
+  - [2.8. Container Manager](#28-container-manager)
+    - [2.8.1. Docker](#281-docker)
+  - [2.9. Policy Manager](#29-policy-manager)
+    - [2.9.1. Conftest](#291-conftest)
+  - [2.10. Supply Chain Manager](#210-supply-chain-manager)
+    - [2.10.1. Trivy](#2101-trivy)
 - [3. Troubleshoot](#3-troubleshoot)
   - [3.1. TODO](#31-todo)
 - [4. References](#4-references)
@@ -32,6 +33,12 @@ A comprehensive development experience (DX) template repository that provides a 
 ## 1. Details
 
 ### 1.1. Prerequisites
+
+- [Git](https://git-scm.com/)
+  > Distributed version control system for tracking source code changes.
+
+- [Git LFS](https://git-lfs.com/)
+  > Git extension for managing large files (assets, binaries) outside normal Git history.
 
 - [Make](https://www.gnu.org/software/make/)
   > Task automation tool to manage build processes and workflows.
@@ -43,9 +50,21 @@ A comprehensive development experience (DX) template repository that provides a 
 
 Contribution guidelines and project management tools.
 
-### 2.1. Task Runner
+### 2.1. AI Agents
 
-#### 2.1.1. Make
+AI Agents are automated tools that assist in various development tasks such as code generation, testing, and documentation.
+
+1. Insights and Details
+
+    - [AGENTS.md](AGENTS.md)
+      > Instructions for AI coding agents working with the project.
+
+    - [SKILLS.md](.github/skills/README.md)
+      > Instructions for AI agent skills used in the project.
+
+### 2.2. Task Runner
+
+#### 2.2.1. Make
 
 [Make](https://www.gnu.org/software/make/) is a automation tool that defines and manages tasks to streamline development workflows.
 
@@ -79,22 +98,14 @@ Contribution guidelines and project management tools.
               teardown          Remove development artifacts and restore the host to its pre-setup state
       ```
 
-### 2.2. Bootstrap
+### 2.3. Bootstrap
 
-#### 2.2.1. Scripts
-
-[scripts/](scripts/README.md) provides scripts to bootstrap, setup, and teardown a software development workspace with requisites.
+#### 2.3.1. Scripts
 
 1. Insights and Details
 
-    - [bootstrap.sh](scripts/bootstrap.sh)
-      > Initializes a software development workspace with requisites.
-
-    - [setup.sh](scripts/setup.sh)
-      > Installs and configures all dependencies essential for development.
-
-    - [teardown.sh](scripts/teardown.sh)
-      > Removes development artifacts and restores the host to its pre-setup state.
+    - [scripts/](scripts/README.md)
+      > Provides scripts to bootstrap, setup, and teardown a software development workspace with requisites.
 
 2. Usage and Instructions
 
@@ -112,23 +123,12 @@ Contribution guidelines and project management tools.
       make teardown
       ```
 
-### 2.3. Dev Containers
-
-[.devcontainer/](.devcontainer/README.md) provides Dev Containers as a consistent development environment using Docker containers.
+### 2.4. Dev Containers
 
 1. Insights and Details
 
-    - [go/](.devcontainer/go/)
-      > Dev Container configuration for Go development environment.
-
-      ```json
-      // ...
-      "postCreateCommand": "sudo make bootstrap && sudo make setup",
-      // ...
-      ```
-
-      > [!NOTE]
-      > The `devcontainer.json` runs the `bootstrap` and `setup` tasks to initialize and configure the development environment.
+    - [.devcontainer/](.devcontainer/README.md)
+      > Provides Dev Containers as a consistent development environment using Docker containers.
 
 2. Usage and Instructions
 
@@ -141,9 +141,9 @@ Contribution guidelines and project management tools.
       # make devcontainer-python
       ```
 
-### 2.4. Release Manager
+### 2.5. Release Manager
 
-#### 2.4.1. Semantic-Release
+#### 2.5.1. Semantic-Release
 
 [Semantic-Release](https://github.com/semantic-release/semantic-release) automates the release process by analyzing commit messages to determine the next version number, generating changelog and release notes, and publishing the release.
 
@@ -160,9 +160,9 @@ Contribution guidelines and project management tools.
       uses: sentenz/actions/semantic-release@latest
       ```
 
-### 2.5. Update Manager
+### 2.6. Update Manager
 
-#### 2.5.1. Renovate
+#### 2.6.1. Renovate
 
 [Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, libraries and packages.
 
@@ -179,7 +179,7 @@ Contribution guidelines and project management tools.
       uses: sentenz/actions/renovate@latest
       ```
 
-#### 2.5.2. Dependabot
+#### 2.6.2. Dependabot
 
 [Dependabot](https://github.com/dependabot/dependabot-core) automates dependency updates by creating pull requests for outdated dependencies, libraries and packages.
 
@@ -188,9 +188,9 @@ Contribution guidelines and project management tools.
     - [.github/dependabot.yml](.github/dependabot.yml)
       > Configuration file for Dependabot specifying update rules and schedules.
 
-### 2.6. Secrets Manager
+### 2.7. Secrets Manager
 
-#### 2.6.1. SOPS
+#### 2.7.1. SOPS
 
 [SOPS (Secrets OPerationS)](https://github.com/getsops/sops) is a tool for managing and encrypting sensitive data such as passwords, API keys, and other secrets.
 
@@ -243,9 +243,9 @@ Contribution guidelines and project management tools.
         make secrets-sops-decrypt <files>
         ```
 
-### 2.7. Container Manager
+### 2.8. Container Manager
 
-#### 2.7.1. Docker
+#### 2.8.1. Docker
 
 [Docker](https://github.com/docker) containerization tool to run applications in isolated container environments and execute container-based tasks.
 
@@ -268,9 +268,9 @@ Contribution guidelines and project management tools.
       # TODO
       ```
 
-### 2.8. Policy Manager
+### 2.9. Policy Manager
 
-#### 2.8.1. Conftest
+#### 2.9.1. Conftest
 
 [Conftest](https://www.conftest.dev/) is a **Policy as Code (PaC)** tool to streamline policy management for improved development, security and audit capability.
 
@@ -279,7 +279,7 @@ Contribution guidelines and project management tools.
     - [conftest.toml](conftest.toml)
       > Configuration file for Conftest specifying policy paths and output formats.
 
-    - [tests/policy](tests/policy/)
+    - [tests/policy/](tests/policy/)
       > Directory contains Rego policies for Conftest to enforce best practices and compliance standards.
 
 2. Usage and Instructions
@@ -304,9 +304,9 @@ Contribution guidelines and project management tools.
       make policy-analysis-conftest <filepath>
       ```
 
-### 2.9. Supply Chain Manager
+### 2.10. Supply Chain Manager
 
-#### 2.9.1. Trivy
+#### 2.10.1. Trivy
 
 [Trivy](https://github.com/aquasecurity/trivy) is a comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues in container images, filesystems, and source code.
 
