@@ -4,6 +4,7 @@ This file provides instructions for AI coding agents working within the project.
 
 - [1. Tech Stack](#1-tech-stack)
 - [2. Project Layout](#2-project-layout)
+- [3. Task Runner](#3-task-runner)
 
 ## 1. Tech Stack
 
@@ -12,3 +13,8 @@ This file provides instructions for AI coding agents working within the project.
 ## 2. Project Layout
 
 - [Project Layout](https://github.com/sentenz/convention/issues/186#issue-1626159304) article.
+
+## 3. Task Runner
+
+- [Makefile](Makefile)
+  > Makefile defining tasks for building, testing, and managing the project.
