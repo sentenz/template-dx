@@ -176,38 +176,37 @@ secrets-sops-view:
 
 # ── Policy Manager ───────────────────────────────────────────────────────────────────────────────
 
-POLICY_IMAGE_CONFTEST ?= openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525
+POLICY_IMAGE_CONFTEST ?= docker.io/openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525
 
-# Usage: make policy-analysis-conftest <filepath>
+# Usage: make policy-conftest-test <filepath>
 #
-## Analyze configuration files using Conftest for policy violations and generate a report
-policy-analysis-conftest:
-	@mkdir -p logs/policy
-
+## Run Conftest container in REPL (Read-Eval-Print-Loop) to evaluate policies against input data and generate a report
+policy-conftest-test:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make policy-analysis-conftest <filepath>"; \
+		echo "usage: make policy-conftest-test <filepath>"; \
 		exit 1; \
 	fi
 
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_CONFTEST)" test "$(filter-out $@,$(MAKECMDGOALS))" > logs/policy/conftest.json 2>&1
-.PHONY: policy-analysis-conftest
+	@mkdir -p logs/policy
+
+	docker run --rm -v "$$(pwd)":/workspace -w /workspace "$(POLICY_IMAGE_CONFTEST)" test "$(filter-out $@,$(MAKECMDGOALS))" > logs/policy/conftest-report.json 2>&1
+.PHONY: policy-conftest-test
 
 POLICY_IMAGE_REGAL ?= ghcr.io/openpolicyagent/regal:0.37.0@sha256:a09884658f3c8c9cc30de136b664b3afdb7927712927184ba891a155a9676050
 
-# Usage: make policy-lint-regal <filepath>
+# Usage: make policy-regal-lint <filepath>
 #
 ## Lint Rego policies using Regal and generate a report
-policy-lint-regal:
-	@mkdir -p logs/analysis
-
+policy-regal-lint:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make policy-lint-regal"; \
+		echo "usage: make policy-regal-lint"; \
 		exit 1; \
 	fi
 
-	docker pull "$(POLICY_IMAGE_REGAL)"
+	@mkdir -p logs/analysis
+
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" regal lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/analysis/regal.json 2>&1
-.PHONY: policy-lint-regal
+.PHONY: policy-regal-lint
 
 # ── SAST Manager ─────────────────────────────────────────────────────────────────────────────────
 
@@ -232,12 +231,12 @@ sast-trivy-fs:
 #
 ## Scan a container image for vulnerabilities using Trivy
 sast-trivy-image:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-image <image_name>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" image --output logs/sast/trivy-image.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-image
@@ -246,12 +245,12 @@ sast-trivy-image:
 #
 ## Scan a container image for license compliance using Trivy
 sast-trivy-image-license:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-image-license <image_name>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" image --scanners license --format table --output logs/sast/trivy-image-license.txt "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-image-license
@@ -260,12 +259,12 @@ sast-trivy-image-license:
 #
 ## Scan a remote repository for vulnerabilities using Trivy
 sast-trivy-repository:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-repository <repo_url>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" repository --output logs/sast/trivy-repository.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-repository
@@ -274,12 +273,12 @@ sast-trivy-repository:
 #
 ## Scan a rootfs e.g. `/` for vulnerabilities using Trivy
 sast-trivy-rootfs:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-rootfs <path>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" rootfs --output logs/sast/trivy-rootfs.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-rootfs
@@ -288,12 +287,12 @@ sast-trivy-rootfs:
 #
 ## Scan SBOM for vulnerabilities using Trivy
 sast-trivy-sbom-scan:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-sbom-scan <sbom_path>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" sbom --output logs/sast/trivy-sbom.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-sbom-scan
@@ -302,12 +301,12 @@ sast-trivy-sbom-scan:
 #
 ## Generate SBOM in CycloneDX format for a container image using Trivy
 sast-trivy-sbom-cyclonedx-image:
-	@mkdir -p logs/sbom
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-sbom-cyclonedx-image <image_name>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sbom
 
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" image --format cyclonedx --output logs/sbom/sbom-image.cdx.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-sbom-cyclonedx-image
@@ -316,12 +315,12 @@ sast-trivy-sbom-cyclonedx-image:
 #
 ## Generate SBOM in CycloneDX format for a file system using Trivy
 sast-trivy-sbom-cyclonedx-fs:
-	@mkdir -p logs/sbom
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-sbom-cyclonedx-fs <path>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sbom
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" filesystem --format cyclonedx --output logs/sbom/sbom-fs.cdx.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-sbom-cyclonedx-fs
@@ -330,12 +329,12 @@ sast-trivy-sbom-cyclonedx-fs:
 #
 ## Scan SBOM for license compliance using Trivy
 sast-trivy-sbom-license:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-sbom-license <sbom_path>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" sbom --scanners license --format table --output logs/sast/trivy-sbom-license.txt "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-sbom-license
@@ -344,12 +343,12 @@ sast-trivy-sbom-license:
 #
 ## Scan the verified SBOM attestation using Trivy
 sast-trivy-sbom-attestation:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-sbom-attestation <intoto_sbom_path>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" sbom "$(filter-out $@,$(MAKECMDGOALS))"
 .PHONY: sast-trivy-sbom-attestation
@@ -358,12 +357,12 @@ sast-trivy-sbom-attestation:
 #
 ## [EXPERIMENTAL] Scan a virtual machine image using Trivy
 sast-trivy-vm:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-trivy-vm <vm_image_path>"; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" vm --output logs/sast/trivy-vm.json "$(filter-out $@,$(MAKECMDGOALS))" 2>&1
 .PHONY: sast-trivy-vm
@@ -372,9 +371,9 @@ sast-trivy-vm:
 #
 ## [EXPERIMENTAL] Scan kubernetes cluster using Trivy (default `cluster`)
 sast-trivy-kubernetes:
-	@mkdir -p logs/sast
-
 	@echo "Note: This requires KUBECONFIG to be mounted or available to the container. Assuming ~/.kube/config is mounted to /root/.kube/config"
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${HOME}/.kube/config:/root/.kube/config" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" kubernetes --output logs/sast/trivy-kubernetes.json $(if $(filter-out $@,$(MAKECMDGOALS)),$(filter-out $@,$(MAKECMDGOALS)),cluster) 2>&1
 .PHONY: sast-trivy-kubernetes
@@ -408,8 +407,6 @@ sast-cosign-attest:
 #
 ## Verify SBOM attestation for an image using Cosign
 sast-cosign-verify:
-	@mkdir -p logs/sast
-
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make sast-cosign-verify <image_name>"; \
 		exit 1; \
@@ -418,6 +415,8 @@ sast-cosign-verify:
 		echo "Error: cosign.pub not found. Run 'make sast-cosign-generate-key-pair' first."; \
 		exit 1; \
 	fi
+
+	@mkdir -p logs/sast
 
 	docker run --rm -v "${HOME}/.docker/config.json:/root/.docker/config.json" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_COSIGN)" verify-attestation --key cosign.pub --type cyclonedx "$(filter-out $@,$(MAKECMDGOALS))" > logs/sbom/sbom.cdx.intoto.jsonl 2> logs/sast/cosign-verify.log
 .PHONY: sast-cosign-verify
