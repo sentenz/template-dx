@@ -1,9 +1,25 @@
 ---
 name: fuzz-testing
-description: Automates fuzz test creation for C++ projects using consistent software testing patterns. Use when creating fuzz tests, mutation testing, or when the user mentions fuzzing, libFuzzer, or AFL.
+description: Automates fuzz test creation for C++ projects using Google FuzzTest with consistent software testing patterns. Use when creating fuzz tests, mutation testing, or when the user mentions fuzzing, AFL, or coverage-guided testing.
 metadata:
-  author: sentenz
-  version: "1.0"
+  version: "1.1"
+  activation:
+    implicit: true
+    priority: 2
+    triggers:
+      - "fuzz"
+      - "fuzzing"
+      - "fuzztest"
+      - "afl"
+      - "mutation testing"
+      - "coverage-guided"
+    match:
+      languages: ["cpp", "c", "c++"]
+      paths: ["src/**/*_fuzz.cpp", "tests/**/*_fuzz.cpp", "fuzz/**/*.cpp"]
+      prompt_regex: "(?i)(fuzz|fuzzing|fuzztest|afl|mutation test|coverage-guided)"
+  usage:
+    load_on_prompt: true
+    autodispatch: true
 ---
 
 # Fuzz Testing

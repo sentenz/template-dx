@@ -24,7 +24,10 @@ Skills are documented in individual `SKILL.md` files located in appropriate subd
 - [Benchmark Testing](benchmark-testing/SKILL.md)
   > TODO Benchmark test creation
 
+- [API Documentation](api-documentation/SKILL.md)
+  > API documentation creation using Doxygen.
+
 ## 2. References
 
-- [AGENTS.md](AGENTS.md) page.
+- [AGENTS.md](https://agents.md/) page.
 - Agent Skills [Specification](https://agentskills.io/specification) page.

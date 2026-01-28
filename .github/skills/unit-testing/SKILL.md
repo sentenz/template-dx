@@ -2,8 +2,25 @@
 name: unit-testing
 description: Automates unit test creation for C++ projects using GoogleTest (GTest) framework with consistent software testing patterns including In-Got-Want, Table-Driven Testing, and AAA patterns. Use when creating, modifying, or reviewing unit tests, or when the user mentions unit tests, test coverage, or GTest.
 metadata:
-  author: sentenz
-  version: "1.0"
+  version: "1.1"
+  activation:
+    implicit: true
+    priority: 1
+    triggers:
+      - "unit test"
+      - "gtest"
+      - "googletest"
+      - "create test"
+      - "add test"
+      - "write test"
+      - "test coverage"
+    match:
+      languages: ["cpp", "c", "c++"]
+      paths: ["src/**/*_test.cpp", "tests/**/*_test.cpp", "test/**/*_test.cpp"]
+      prompt_regex: "(?i)(unit test|gtest|googletest|create test|add test|write test|test coverage|testing)"
+  usage:
+    load_on_prompt: true
+    autodispatch: true
 ---
 
 # Unit Testing
@@ -24,6 +41,12 @@ Instructions for AI coding agents on automating unit test creation using consist
 - [5. Commands](#5-commands)
 - [6. Style Guide](#6-style-guide)
 - [7. Template](#7-template)
+  - [7.1. File Header Template](#71-file-header-template)
+  - [7.2. Table-Driven Test Template](#72-table-driven-test-template)
+  - [7.3. Test Fixture Template](#73-test-fixture-template)
+  - [7.4. Exception Test Template](#74-exception-test-template)
+  - [7.5. Boundary Value Test Template](#75-boundary-value-test-template)
+  - [7.6. Data-Driven Test Template (JSON)](#76-data-driven-test-template-json)
 - [8. References](#8-references)
 
 ## 1. Benefits
@@ -224,18 +247,24 @@ Test doubles (e.g., mocks, stubs, fakes) are simplified versions of complex obje
 
 ## 7. Template
 
-Use this template (In-Got-Want + Table-Driven + AAA) for new test functions. Replace placeholders with actual values and adjust as needed for the use case.
+Use these templates for new unit tests. Replace placeholders with actual values.
+
+### 7.1. File Header Template
 
 ```cpp
 #include <gtest/gtest.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "<module>/<header>.hpp"
 
 using namespace <namespace>;
+```
 
+### 7.2. Table-Driven Test Template
+
+```cpp
 TEST(<Module>Test, <FunctionName>)
 {
   // In-Got-Want
@@ -256,9 +285,8 @@ TEST(<Module>Test, <FunctionName>)
 
   // Table-Driven Testing
   const std::vector<Tests> tests = {
-    {"case-description-1", /* in */ {/* input values */}, /* want */ {/* expected output */}},
-    {"case-description-2", /* in */ {/* input values */}, /* want */ {/* expected output */}},
-    // add more cases as needed
+    {"case-description-1", {/* input */}, {/* expected */}},
+    {"case-description-2", {/* input */}, {/* expected */}},
   };
 
   for (const auto &tc : tests)
@@ -267,13 +295,136 @@ TEST(<Module>Test, <FunctionName>)
 
     // Arrange
     <Module> <object>;
-    // additional setup as needed
 
     // Act
     auto got = <object>.<function>(tc.in.<input>);
 
     // Assert
     EXPECT_EQ(got, tc.want.<expected>);
+  }
+}
+```
+
+### 7.3. Test Fixture Template
+
+```cpp
+class <Module>Test : public ::testing::Test
+{
+protected:
+  void SetUp() override
+  {
+    // Initialize common objects or state
+  }
+
+  void TearDown() override
+  {
+    // Clean up resources or reset state
+  }
+
+  <Module> object_;
+};
+
+TEST_F(<Module>Test, <FunctionName>)
+{
+  // Arrange
+  auto input = <input_value>;
+
+  // Act
+  auto got = object_.<function>(input);
+
+  // Assert
+  EXPECT_EQ(got, <expected>);
+}
+```
+
+### 7.4. Exception Test Template
+
+```cpp
+TEST(<Module>Test, <FunctionName>ThrowsOnInvalidInput)
+{
+  // Arrange
+  <Module> object;
+  auto invalid_input = <invalid_value>;
+
+  // Act & Assert
+  EXPECT_THROW(object.<function>(invalid_input), <ExceptionType>);
+}
+```
+
+### 7.5. Boundary Value Test Template
+
+```cpp
+TEST(<Module>Test, <FunctionName>BoundaryValues)
+{
+  // In-Got-Want
+  struct Tests
+  {
+    std::string label;
+
+    struct In
+    {
+      <input_type> input;
+    } in;
+
+    struct Want
+    {
+      <output_type> expected;
+    } want;
+  };
+
+  // Table-Driven Testing with boundary cases
+  const std::vector<Tests> tests = {
+    {"minimum-value", {<MIN_VALUE>}, {/* expected */}},
+    {"maximum-value", {<MAX_VALUE>}, {/* expected */}},
+    {"zero-value", {0}, {/* expected */}},
+    {"empty-input", {{}}, {/* expected */}},
+    {"negative-value", {-1}, {/* expected */}},
+  };
+
+  for (const auto &tc : tests)
+  {
+    SCOPED_TRACE(tc.label);
+
+    // Arrange
+    <Module> object;
+
+    // Act
+    auto got = object.<function>(tc.in.input);
+
+    // Assert
+    EXPECT_EQ(got, tc.want.expected);
+  }
+}
+```
+
+### 7.6. Data-Driven Test Template (JSON)
+
+```cpp
+#include <nlohmann/json.hpp>
+
+#include <fstream>
+
+TEST(<Module>Test, <FunctionName>DataDriven)
+{
+  // Load test data from JSON file
+  std::ifstream file("<module>/<header>_test.json");
+  nlohmann::json test_data;
+  file >> test_data;
+
+  for (const auto &tc : test_data["tests"])
+  {
+    SCOPED_TRACE(tc["label"].get<std::string>());
+
+    // Arrange
+    <Module> object;
+    auto input = tc["in"]["input"].get<<input_type>>();
+    auto expected = tc["want"]["expected"].get<<output_type>>();
+
+    // Act
+    auto got = object.<function>(input);
+
+    // Assert
+    EXPECT_EQ(got, expected);
   }
 }
 ```

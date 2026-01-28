@@ -2,8 +2,25 @@
 name: mock-testing
 description: Automates mock test creation for C++ projects using Google Mock (GMock) framework with consistent software testing patterns. Use when creating tests with mocked dependencies, interface mocking, behavior verification, or when the user mentions mocks, stubs, fakes, or GMock.
 metadata:
-  author: sentenz
-  version: "1.0"
+  version: "1.1"
+  activation:
+    implicit: true
+    priority: 1
+    triggers:
+      - "mock"
+      - "gmock"
+      - "stub"
+      - "fake"
+      - "mock object"
+      - "test double"
+      - "mocked dependency"
+    match:
+      languages: ["cpp", "c", "c++"]
+      paths: ["src/**/*_test.cpp", "tests/**/*_test.cpp", "test/**/*_test.cpp"]
+      prompt_regex: "(?i)(mock|gmock|stub|fake|test double|mocked|interface mock)"
+  usage:
+    load_on_prompt: true
+    autodispatch: true
 ---
 
 # Mock Testing
@@ -16,6 +33,12 @@ Instructions for AI coding agents on automating mock test creation using Google 
 - [4. Commands](#4-commands)
 - [5. Style Guide](#5-style-guide)
 - [6. Template](#6-template)
+  - [6.1. File Header Template](#61-file-header-template)
+  - [6.2. Mock Class Template](#62-mock-class-template)
+  - [6.3. Table-Driven Mock Test Template](#63-table-driven-mock-test-template)
+  - [6.4. Sequence Verification Template](#64-sequence-verification-template)
+  - [6.5. Exception Testing Template](#65-exception-testing-template)
+  - [6.6. NiceMock Template](#66-nicemock-template)
 - [7. References](#7-references)
 
 ## 1. Benefits
@@ -156,7 +179,9 @@ Instructions for AI coding agents on automating mock test creation using Google 
 
 ## 6. Template
 
-Use this template (In-Got-Want + Table-Driven + AAA + Mocks) applying Google Mock example for new mock test functions. Replace placeholders with actual values and adjust as needed for the use case.
+Use these templates for new mock tests. Replace placeholders with actual values.
+
+### 6.1. File Header Template
 
 ```cpp
 #include <gmock/gmock.h>
@@ -171,17 +196,25 @@ Use this template (In-Got-Want + Table-Driven + AAA + Mocks) applying Google Moc
 
 using namespace <namespace>;
 using namespace ::testing;
+```
 
-// Mock class definition
+### 6.2. Mock Class Template
+
+```cpp
+/**
+ * @brief Mock implementation of <Interface> for testing.
+ */
 class Mock<Interface> : public <Interface>
 {
 public:
   MOCK_METHOD(<return_type>, <method_name>, (<param_types>), (override));
   MOCK_METHOD(<return_type>, <method_name2>, (<param_types>), (const, override));
-  // Add more MOCK_METHOD declarations as needed
 };
+```
 
-// Example with In-Got-Want and Table-Driven Testing
+### 6.3. Table-Driven Mock Test Template
+
+```cpp
 TEST(<Module>Test, <FunctionName>WithMock)
 {
   // In-Got-Want
@@ -207,12 +240,12 @@ TEST(<Module>Test, <FunctionName>WithMock)
   // Table-Driven Testing
   const std::vector<Tests> tests = {
     {
-      "case description 1", 
+      "case-description-1", 
       /* in */ {/* input values */}, 
       /* want */ {/* expected */, /* call_count */ 1, /* return_value */ {}, /* param */ {}}
     },
     {
-      "case description 2", 
+      "case-description-2", 
       /* in */ {/* input values */}, 
       /* want */ {/* expected */, /* call_count */ 1, /* return_value */ {}, /* param */ {}}
     },
@@ -225,34 +258,34 @@ TEST(<Module>Test, <FunctionName>WithMock)
 
     // Arrange
     auto mock_dependency = std::make_shared<Mock<Interface>>();
-    
-    // Set up expectations
+
     EXPECT_CALL(*mock_dependency, <method_name>(tc.want.param))
         .Times(tc.want.call_count)
         .WillOnce(Return(tc.want.return_value));
-    
+
     <Implementation> object(mock_dependency);
-    // additional setup as needed
 
     // Act
     auto got = object.<function>(tc.in.<input>);
 
     // Assert
     EXPECT_EQ(got, tc.want.expected);
-    // Mock expectations are automatically verified here
   }
 }
+```
 
-// Example with strict mock and sequence verification
+### 6.4. Sequence Verification Template
+
+```cpp
 TEST(<Module>Test, <FunctionName>WithSequence)
 {
   // Arrange
   auto mock_dependency = std::make_shared<StrictMock<Mock<Interface>>>();
-  
+
   InSequence seq;
   EXPECT_CALL(*mock_dependency, <method1>(_)).WillOnce(Return(<value1>));
   EXPECT_CALL(*mock_dependency, <method2>(_)).WillOnce(Return(<value2>));
-  
+
   <Implementation> object(mock_dependency);
 
   // Act
@@ -261,20 +294,48 @@ TEST(<Module>Test, <FunctionName>WithSequence)
   // Assert
   EXPECT_EQ(got, <expected>);
 }
+```
 
-// Example with exception testing
-TEST(<Module>Test, <FunctionName>WithException)
+### 6.5. Exception Testing Template
+
+```cpp
+TEST(<Module>Test, <FunctionName>ThrowsOnError)
 {
   // Arrange
   auto mock_dependency = std::make_shared<Mock<Interface>>();
-  
+
   EXPECT_CALL(*mock_dependency, <method_name>(_))
-      .WillOnce(Throw(std::runtime_error("test error")));
-  
+      .WillOnce(Throw(std::runtime_error("error message")));
+
   <Implementation> object(mock_dependency);
 
   // Act & Assert
   EXPECT_THROW(object.<function>(), std::runtime_error);
+}
+```
+
+### 6.6. NiceMock Template
+
+```cpp
+TEST(<Module>Test, <FunctionName>WithNiceMock)
+{
+  // Arrange
+  auto mock_dependency = std::make_shared<NiceMock<Mock<Interface>>>();
+
+  ON_CALL(*mock_dependency, <method_name>(_))
+      .WillByDefault(Return(<default_value>));
+
+  EXPECT_CALL(*mock_dependency, <critical_method>(_))
+      .Times(1)
+      .WillOnce(Return(<value>));
+
+  <Implementation> object(mock_dependency);
+
+  // Act
+  auto got = object.<function>();
+
+  // Assert
+  EXPECT_EQ(got, <expected>);
 }
 ```
 
