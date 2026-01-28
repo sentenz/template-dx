@@ -33,6 +33,7 @@ The `.devcontainer/` directory contains configuration files for setting up a [De
 
 ## 2. References
 
-- Dev Container [Specification](https://containers.dev/) page.
-- Dev Container [Property](https://containers.dev/implementors/json_reference/) page.
+- Dev Container [Features](https://containers.dev/features) page.
+- Dev Container [Templates](https://containers.dev/templates) page.
+- Dev Container [Specification](https://containers.dev/implementors/spec/) page.
 - GitHub [Dev Containers Images](https://github.com/devcontainers/images) repository.
