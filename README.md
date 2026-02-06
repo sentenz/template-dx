@@ -8,26 +8,26 @@ A comprehensive Development Experience (DX) template repository that provides a 
   - [1.1. Prerequisites](#11-prerequisites)
 - [2. Contribute](#2-contribute)
   - [2.1. AI Agents](#21-ai-agents)
-  - [2.2. Task Runner](#22-task-runner)
-    - [2.2.1. Make](#221-make)
-  - [2.3. Bootstrap](#23-bootstrap)
-    - [2.3.1. Scripts](#231-scripts)
-  - [2.4. Dev Containers](#24-dev-containers)
-  - [2.5. Release Manager](#25-release-manager)
-    - [2.5.1. Semantic-Release](#251-semantic-release)
-  - [2.6. Update Manager](#26-update-manager)
-    - [2.6.1. Renovate](#261-renovate)
-    - [2.6.2. Dependabot](#262-dependabot)
-  - [2.7. Secrets Manager](#27-secrets-manager)
-    - [2.7.1. SOPS](#271-sops)
-  - [2.8. Container Manager](#28-container-manager)
-    - [2.8.1. Docker](#281-docker)
-  - [2.9. Policy Manager](#29-policy-manager)
-    - [2.9.1. Conftest](#291-conftest)
-  - [2.10. Supply Chain Manager](#210-supply-chain-manager)
-    - [2.10.1. Trivy](#2101-trivy)
-  - [2.11. Skills Manager](#211-skills-manager)
-    - [2.11.1. Skills CLI](#2111-skills-cli)
+  - [2.2. Skills Manager](#22-skills-manager)
+    - [2.2.1. Skills CLI](#221-skills-cli)
+  - [2.3. Task Runner](#23-task-runner)
+    - [2.3.1. Make](#231-make)
+  - [2.4. Bootstrap](#24-bootstrap)
+    - [2.4.1. Scripts](#241-scripts)
+  - [2.5. Dev Containers](#25-dev-containers)
+  - [2.6. Release Manager](#26-release-manager)
+    - [2.6.1. Semantic-Release](#261-semantic-release)
+  - [2.7. Update Manager](#27-update-manager)
+    - [2.7.1. Renovate](#271-renovate)
+    - [2.7.2. Dependabot](#272-dependabot)
+  - [2.8. Secrets Manager](#28-secrets-manager)
+    - [2.8.1. SOPS](#281-sops)
+  - [2.9. Container Manager](#29-container-manager)
+    - [2.9.1. Docker](#291-docker)
+  - [2.10. Policy Manager](#210-policy-manager)
+    - [2.10.1. Conftest](#2101-conftest)
+  - [2.11. Supply Chain Manager](#211-supply-chain-manager)
+    - [2.11.1. Trivy](#2111-trivy)
 - [3. Troubleshoot](#3-troubleshoot)
   - [3.1. TODO](#31-todo)
 - [4. References](#4-references)
@@ -61,8 +61,8 @@ AI Agents are automated tools that assist in various development tasks such as c
     - [AGENTS.md](AGENTS.md)
       > Instructions for AI coding agents working with the project.
 
-    - [SKILL.md](.github/skills/README.md)
-      > Instructions for AI agent skills used in the project.
+    - [.agents/skills/](.agents/skills/)
+      > Directory containing AI agent skill definitions and configurations.
 
 2. Usage and Instructions
 
@@ -70,7 +70,7 @@ AI Agents are automated tools that assist in various development tasks such as c
       > AI Agents can be implicitly invoked based on file paths, programming languages, or specific keywords in user prompts.
 
       ```plaintext
-      .github/skills/<skill-name>/SKILL.md
+      .agents/skills/<skill-name>/SKILL.md
       ```
 
     - Explicit Invocation
@@ -80,9 +80,32 @@ AI Agents are automated tools that assist in various development tasks such as c
       @agent <skill-name> <task-description>
       ```
 
-### 2.2. Task Runner
+### 2.2. Skills Manager
 
-#### 2.2.1. Make
+#### 2.2.1. Skills CLI
+
+[Skills CLI](https://skills.sh/) is a command-line tool for managing AI agent skills in development projects.
+
+1. Insights and Details
+
+    - [Sentenz Skills](https://github.com/sentenz/skills)
+      > Reusable AI agent skills for various development tasks.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      make skills-add
+      ```
+
+      ```bash
+      make skills-update
+      ```
+
+### 2.3. Task Runner
+
+#### 2.3.1. Make
 
 [Make](https://www.gnu.org/software/make/) is a automation tool that defines and manages tasks to streamline development workflows.
 
@@ -116,9 +139,9 @@ AI Agents are automated tools that assist in various development tasks such as c
               teardown          Remove development artifacts and restore the host to its pre-setup state
       ```
 
-### 2.3. Bootstrap
+### 2.4. Bootstrap
 
-#### 2.3.1. Scripts
+#### 2.4.1. Scripts
 
 1. Insights and Details
 
@@ -141,7 +164,7 @@ AI Agents are automated tools that assist in various development tasks such as c
       make teardown
       ```
 
-### 2.4. Dev Containers
+### 2.5. Dev Containers
 
 1. Insights and Details
 
@@ -159,9 +182,9 @@ AI Agents are automated tools that assist in various development tasks such as c
       # make devcontainer-python
       ```
 
-### 2.5. Release Manager
+### 2.6. Release Manager
 
-#### 2.5.1. Semantic-Release
+#### 2.6.1. Semantic-Release
 
 [Semantic-Release](https://github.com/semantic-release/semantic-release) automates the release process by analyzing commit messages to determine the next version number, generating changelog and release notes, and publishing the release.
 
@@ -178,9 +201,9 @@ AI Agents are automated tools that assist in various development tasks such as c
       uses: sentenz/actions/semantic-release@latest
       ```
 
-### 2.6. Update Manager
+### 2.7. Update Manager
 
-#### 2.6.1. Renovate
+#### 2.7.1. Renovate
 
 [Renovate](https://github.com/renovatebot/renovate) automates dependency updates by creating merge requests for outdated dependencies, libraries and packages.
 
@@ -197,7 +220,7 @@ AI Agents are automated tools that assist in various development tasks such as c
       uses: sentenz/actions/renovate@latest
       ```
 
-#### 2.6.2. Dependabot
+#### 2.7.2. Dependabot
 
 [Dependabot](https://github.com/dependabot/dependabot-core) automates dependency updates by creating pull requests for outdated dependencies, libraries and packages.
 
@@ -206,9 +229,9 @@ AI Agents are automated tools that assist in various development tasks such as c
     - [.github/dependabot.yml](.github/dependabot.yml)
       > Configuration file for Dependabot specifying update rules and schedules.
 
-### 2.7. Secrets Manager
+### 2.8. Secrets Manager
 
-#### 2.7.1. SOPS
+#### 2.8.1. SOPS
 
 [SOPS (Secrets OPerationS)](https://github.com/getsops/sops) is a tool for managing and encrypting sensitive data such as passwords, API keys, and other secrets.
 
@@ -261,9 +284,9 @@ AI Agents are automated tools that assist in various development tasks such as c
         make secrets-sops-decrypt <files>
         ```
 
-### 2.8. Container Manager
+### 2.9. Container Manager
 
-#### 2.8.1. Docker
+#### 2.9.1. Docker
 
 [Docker](https://github.com/docker) containerization tool to run applications in isolated container environments and execute container-based tasks.
 
@@ -286,9 +309,9 @@ AI Agents are automated tools that assist in various development tasks such as c
       # TODO
       ```
 
-### 2.9. Policy Manager
+### 2.10. Policy Manager
 
-#### 2.9.1. Conftest
+#### 2.10.1. Conftest
 
 [Conftest](https://www.conftest.dev/) is a **Policy as Code (PaC)** tool to streamline policy management for improved development, security and audit capability.
 
@@ -322,9 +345,9 @@ AI Agents are automated tools that assist in various development tasks such as c
       make policy-conftest-test <filepath>
       ```
 
-### 2.10. Supply Chain Manager
+### 2.11. Supply Chain Manager
 
-#### 2.10.1. Trivy
+#### 2.11.1. Trivy
 
 [Trivy](https://github.com/aquasecurity/trivy) is a comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues in container images, filesystems, and source code.
 
@@ -360,32 +383,6 @@ AI Agents are automated tools that assist in various development tasks such as c
 
       ```bash
       make sast-trivy-sbom-license <sbom_path>
-      ```
-
-### 2.11. Skills Manager
-
-#### 2.11.1. Skills CLI
-
-[Skills CLI](https://skills.sh/) is a command-line tool for managing AI agent skills in development projects.
-
-1. Insights and Details
-
-    - [.agents/skills/](.agents/skills/)
-      > Directory containing AI agent skill definitions and configurations.
-
-    - [Sentenz SKills](https://github.com/sentenz/skills)
-      > Reusable AI agent skills for various development tasks.
-
-2. Usage and Instructions
-
-    - Tasks
-
-      ```bash
-      make skills-add
-      ```
-
-      ```bash
-      make skills-update
       ```
 
 ## 3. Troubleshoot
