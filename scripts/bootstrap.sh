@@ -22,6 +22,9 @@ readonly -A APT_PACKAGES=(
   ["go"]=""
 )
 
+readonly -A NPM_PACKAGES=(
+  ["skills"]="1.3.7"
+)
 # Control Flow Logic
 
 function bootstrap() {
@@ -31,6 +34,12 @@ function bootstrap() {
   ((retval |= $?))
 
   pkg_apt_clean
+  ((retval |= $?))
+
+  pkg_npm_install_list NPM_PACKAGES
+  ((retval |= $?))
+
+  pkg_npm_clean
   ((retval |= $?))
 
   return "${retval}"

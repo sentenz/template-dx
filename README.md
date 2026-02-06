@@ -26,6 +26,8 @@ A comprehensive Development Experience (DX) template repository that provides a 
     - [2.9.1. Conftest](#291-conftest)
   - [2.10. Supply Chain Manager](#210-supply-chain-manager)
     - [2.10.1. Trivy](#2101-trivy)
+  - [2.11. Skills Manager](#211-skills-manager)
+    - [2.11.1. Skills CLI](#2111-skills-cli)
 - [3. Troubleshoot](#3-troubleshoot)
   - [3.1. TODO](#31-todo)
 - [4. References](#4-references)
@@ -360,6 +362,32 @@ AI Agents are automated tools that assist in various development tasks such as c
       make sast-trivy-sbom-license <sbom_path>
       ```
 
+### 2.11. Skills Manager
+
+#### 2.11.1. Skills CLI
+
+[Skills CLI](https://skills.sh/) is a command-line tool for managing AI agent skills in development projects.
+
+1. Insights and Details
+
+    - [.agents/skills/](.agents/skills/)
+      > Directory containing AI agent skill definitions and configurations.
+
+    - [Sentenz SKills](https://github.com/sentenz/skills)
+      > Reusable AI agent skills for various development tasks.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      make skills-add
+      ```
+
+      ```bash
+      make skills-update
+      ```
+
 ## 3. Troubleshoot
 
 ### 3.1. TODO
@@ -372,3 +400,4 @@ TODO
 - Sentenz [Template C++](https://github.com/sentenz/template-cpp) repository.
 - Sentenz [Actions](https://github.com/sentenz/actions) repository.
 - Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
+- Sentenz [Skills](https://github.com/sentenz/skills) repository.
