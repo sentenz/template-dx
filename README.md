@@ -64,7 +64,7 @@ The contribution guide covers:
   > Conftest for policy-as-code to streamline policy management.
 
 - [Supply Chain Manager](CONTRIBUTING.md#11-supply-chain-manager)
-  > Trivy comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues.
+  > Trivy is a comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues.
 
 ## 3. Troubleshoot
 
