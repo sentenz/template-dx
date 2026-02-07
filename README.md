@@ -31,6 +31,20 @@ A comprehensive Development Experience (DX) template repository that provides a 
 
 For detailed contribution guidelines and project management tools, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
+The contribution guide covers:
+
+- **AI Agents** - Automated tools for code generation, testing, and documentation
+- **Skills Manager** - CLI tool for managing AI agent skills
+- **Task Runner** - Make automation for streamlined workflows
+- **Bootstrap** - Scripts for workspace initialization and setup
+- **Dev Containers** - Consistent development environments using Docker
+- **Release Manager** - Semantic-Release for automated versioning
+- **Update Manager** - Renovate and Dependabot for dependency updates
+- **Secrets Manager** - SOPS for secure credential management
+- **Container Manager** - Docker containerization and deployment
+- **Policy Manager** - Conftest for policy-as-code enforcement
+- **Supply Chain Manager** - Trivy for security scanning and vulnerability detection
+
 ## 3. Troubleshoot
 
 ### 3.1. TODO
