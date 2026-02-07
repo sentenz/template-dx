@@ -33,17 +33,38 @@ For detailed contribution guidelines and project management tools, see [CONTRIBU
 
 The contribution guide covers:
 
-- **AI Agents** - Automated tools for code generation, testing, and documentation
-- **Skills Manager** - CLI tool for managing AI agent skills
-- **Task Runner** - Make automation for streamlined workflows
-- **Bootstrap** - Scripts for workspace initialization and setup
-- **Dev Containers** - Consistent development environments using Docker
-- **Release Manager** - Semantic-Release for automated versioning
-- **Update Manager** - Renovate and Dependabot for dependency updates
-- **Secrets Manager** - SOPS for secure credential management
-- **Container Manager** - Docker containerization and deployment
-- **Policy Manager** - Conftest for policy-as-code enforcement
-- **Supply Chain Manager** - Trivy for security scanning and vulnerability detection
+- [AI Agents](CONTRIBUTING.md#1-ai-agents)
+  > Automated tools that assist in various development tasks such as code generation, testing, and documentation.
+
+- [Skills Manager](CONTRIBUTING.md#2-skills-manager)
+  > CLI tool for managing AI agent skills in development projects.
+
+- [Task Runner](CONTRIBUTING.md#3-task-runner)
+  > Make automation tool that defines and manages tasks to streamline development workflows.
+
+- [Bootstrap](CONTRIBUTING.md#4-bootstrap)
+  > Scripts to bootstrap, setup, and teardown a software development workspace with requisites.
+
+- [Dev Containers](CONTRIBUTING.md#5-dev-containers)
+  > Consistent development environment using Docker containers.
+
+- [Release Manager](CONTRIBUTING.md#6-release-manager)
+  > Semantic-Release automates the release process by analyzing commit messages.
+
+- [Update Manager](CONTRIBUTING.md#7-update-manager)
+  > Renovate and Dependabot automate dependency updates by creating pull requests.
+
+- [Secrets Manager](CONTRIBUTING.md#8-secrets-manager)
+  > SOPS for managing and encrypting sensitive data such as passwords, API keys, and other secrets.
+
+- [Container Manager](CONTRIBUTING.md#9-container-manager)
+  > Docker containerization tool to run applications in isolated container environments.
+
+- [Policy Manager](CONTRIBUTING.md#10-policy-manager)
+  > Conftest for policy-as-code to streamline policy management.
+
+- [Supply Chain Manager](CONTRIBUTING.md#11-supply-chain-manager)
+  > Trivy comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues.
 
 ## 3. Troubleshoot
 
