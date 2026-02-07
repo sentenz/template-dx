@@ -425,10 +425,10 @@ sast-cosign-verify:
 
 ## Add sentenz/skills to the project
 skills-add:
-	skills add sentenz/skills
+	npx skills add sentenz/skills
 .PHONY: skills-add
 
 ## Update sentenz/skills in the project
 skills-update:
-	skills update sentenz/skills
+	npx skills update sentenz/skills
 .PHONY: skills-update
