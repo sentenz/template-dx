@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A comprehensive Development Experience (DX) template repository that provides a structured framework and essential tools to streamline the software development process.
+A Development Experience (DX) template providing a structured framework and essential tools to streamline development.
 
 - [1. Details](#1-details)
   - [1.1. Prerequisites](#11-prerequisites)
@@ -25,13 +25,13 @@ A comprehensive Development Experience (DX) template repository that provides a 
   > Task automation tool to manage build processes and workflows.
 
 - [Docker](https://www.docker.com/)
-  > Containerization tool to run applications in isolated container environments and execute container-based tasks.
+  > Containerization platform for running applications in isolated environments and executing container-based tasks.
 
 ## 2. Contribute
 
-For detailed contribution guidelines and project management tools, see [CONTRIBUTING.md](CONTRIBUTING.md).
+[CONTRIBUTING.md](CONTRIBUTING.md) provides guidens and instructions for contributing to the project.
 
-The contribution guide covers:
+1. Guidens and Instructions
 
 - [AI Agents](CONTRIBUTING.md#1-ai-agents)
   > Automated tools that assist in various development tasks such as code generation, testing, and documentation.
@@ -46,7 +46,7 @@ The contribution guide covers:
   > Scripts to bootstrap, setup, and teardown a software development workspace with requisites.
 
 - [Dev Containers](CONTRIBUTING.md#5-dev-containers)
-  > Consistent development environment using Docker containers.
+  > Consistent development environments using Docker containers.
 
 - [Release Manager](CONTRIBUTING.md#6-release-manager)
   > Semantic-Release automates the release process by analyzing commit messages.
@@ -61,10 +61,10 @@ The contribution guide covers:
   > Docker containerization tool to run applications in isolated container environments.
 
 - [Policy Manager](CONTRIBUTING.md#10-policy-manager)
-  > Conftest for policy-as-code to streamline policy management.
+  > Conftest for policy-as-code enforcement.
 
 - [Supply Chain Manager](CONTRIBUTING.md#11-supply-chain-manager)
-  > Trivy is a comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues.
+  > Trivy for security scanning of vulnerabilities, misconfigurations, and compliance issues.
 
 ## 3. Troubleshoot
 
