@@ -15,6 +15,7 @@
     "ms-kubernetes-tools.vscode-kubernetes-tools",
     "ms-azuretools.vscode-containers",
     "ms-azuretools.vscode-docker",
+    "github.vscode-github-actions",
     "docker.docker",
     "redhat.vscode-yaml",
     "sonarsource.sonarlint-vscode",
