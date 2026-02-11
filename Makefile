@@ -421,14 +421,14 @@ sast-cosign-verify:
 	docker run --rm -v "${HOME}/.docker/config.json:/root/.docker/config.json" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_COSIGN)" verify-attestation --key cosign.pub --type cyclonedx "$(filter-out $@,$(MAKECMDGOALS))" > logs/sbom/sbom.cdx.intoto.jsonl 2> logs/sast/cosign-verify.log
 .PHONY: sast-cosign-verify
 
-# ── Skills Manager ──────────────────────────────────────────────────────────────────────────────
+# ── Skills Manager ───────────────────────────────────────────────────────────────────────────────
 
 ## Add sentenz/skills to the project
 skills-add:
-	npx skills add sentenz/skills
+	skills add sentenz/skills
 .PHONY: skills-add
 
 ## Update sentenz/skills in the project
 skills-update:
-	npx skills update sentenz/skills
+	skills update sentenz/skills
 .PHONY: skills-update
