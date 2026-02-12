@@ -93,5 +93,5 @@ TODO
 - Sentenz [Template DX](https://github.com/sentenz/template-dx) repository.
 - Sentenz [Template C++](https://github.com/sentenz/template-cpp) repository.
 - Sentenz [Actions](https://github.com/sentenz/actions) repository.
-- Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
 - Sentenz [Skills](https://github.com/sentenz/skills) repository.
+- Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.

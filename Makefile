@@ -199,7 +199,7 @@ POLICY_IMAGE_REGAL ?= ghcr.io/openpolicyagent/regal:0.37.0@sha256:a09884658f3c8c
 ## Lint Rego policies using Regal and generate a report
 policy-regal-lint:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make policy-regal-lint"; \
+		echo "usage: make policy-regal-lint <filepath>"; \
 		exit 1; \
 	fi
 
