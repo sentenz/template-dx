@@ -1,0 +1,38 @@
+name: TruffleHog
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  trufflehog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+      pull-requests: write
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Run TruffleHog
+        id: trufflehog
+        uses: trufflesecurity/trufflehog@v3.93.6
+        continue-on-error: true
+        with:
+          path: ./
+          base: ${{ github.event.before }}
+          head: ${{ github.sha }}
+          extra_args: --debug
+
+      - name: Results Status
+        if: steps.trufflehog.outcome == 'failure'
+        run: exit 1
