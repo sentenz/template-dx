@@ -28,6 +28,7 @@
     "yzhang.markdown-all-in-one",
     "davidanson.vscode-markdownlint",
     "alefragnani.project-manager",
-    "tsandall.opa"
+    "tsandall.opa",
+    "mermaidchart.vscode-mermaid-chart"
   ]
 }

@@ -23,6 +23,8 @@ Contribution guidelines and project management tools.
   - [10.1. Conftest](#101-conftest)
 - [11. Supply Chain Manager](#11-supply-chain-manager)
   - [11.1. Trivy](#111-trivy)
+- [16. Documentation Generators](#16-documentation-generators)
+  - [16.1. Doxygen](#161-doxygen)
 
 ## 1. AI Agents
 
@@ -355,4 +357,33 @@ AI Agents are automated tools that assist in various development tasks such as c
 
       ```bash
       make sast-trivy-sbom-license <sbom_path>
+      ```
+
+## 16. Documentation Generators
+
+### 16.1. Doxygen
+
+[Doxygen](https://www.doxygen.nl/) is an **API Documentation Generator** for C++, C programming languages, used to create software reference documentation from annotated source code.
+
+1. Insights and Details
+
+    - [Doxyfile](Doxyfile)
+      > Configuration file for Doxygen specifying documentation generation settings.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/doxygen@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make pages-doxygen-build
+      ```
+
+      ```bash
+      make pages-doxygen-serve
       ```
