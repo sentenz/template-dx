@@ -90,88 +90,124 @@ SECRETS_SOPS_UID ?= sops-dx
 
 # Usage: make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
 #
-## Generate a new GPG key pair for SOPS
+## Generate a new GPG key pair for SOPS with the specified UID
 secrets-gpg-generate:
-	@gpg --batch --quiet --passphrase '' --quick-generate-key "$(SECRETS_SOPS_UID)" ed25519 cert,sign 0
-	@NEW_FPR="$$(gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"
-	@gpg --batch --quiet --passphrase '' --quick-add-key "$${NEW_FPR}" cv25519 encrypt 0
+        @gpg --batch --quiet --passphrase '' --quick-generate-key "$(SECRETS_SOPS_UID)" ed25519 cert,sign 0
+        @NEW_FPR="$$(gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"
+        @gpg --batch --quiet --passphrase '' --quick-add-key "$${NEW_FPR}" cv25519 encrypt 0
 .PHONY: secrets-gpg-generate
 
-# Usage: make secrets-gpg-show SECRETS_SOPS_UID=<uid>
+# Usage: make secrets-gpg-export SECRETS_SOPS_UID=<uid>
 #
-## Print the GPG key fingerprint for SOPS (.sops.yaml)
-secrets-gpg-show:
-	@FPR="$$(gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" | awk -F: '/^fpr:/ {print $$10; exit}')"; \
-	if [ -z "$${FPR}" ]; then \
-		echo "error: no fingerprint found for UID '$(SECRETS_SOPS_UID)'" >&2; \
-		exit 1; \
-	fi; \
-	echo -e "UID: $(SECRETS_SOPS_UID)\nFingerprint: $${FPR}"
-.PHONY: secrets-gpg-show
+## Export the GPG key pair for SOPS with the specified UID to ASCII files
+secrets-gpg-export:
+        @if [ -z "$(SECRETS_SOPS_UID)" ]; then \
+                echo "usage: make secrets-gpg-export SECRETS_SOPS_UID=<uid>" >&2; \
+                exit 1; \
+        fi
+
+        @gpg --armor --export "$(SECRETS_SOPS_UID)" > "$(SECRETS_SOPS_UID)-public.asc"
+        @gpg --armor --export-secret-keys "$(SECRETS_SOPS_UID)" > "$(SECRETS_SOPS_UID)-private.asc"
+.PHONY: secrets-gpg-export
+
+# Usage: make secrets-gpg-import [SECRETS_SOPS_UID=<uid>] <key-files>
+#
+## Import GPG keys from specified files and if provided set ultimate trust for the SOPS UID
+secrets-gpg-import:
+        @if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+                echo "usage: make secrets-gpg-import <files>" >&2; \
+                exit 1; \
+        fi
+
+        # Import keys from specified files
+        @for file in $(filter-out $@,$(MAKECMDGOALS)); do \
+                if [ -f "$$file" ]; then \
+                        gpg --import "$$file"; \
+                fi; \
+        done
+
+        # Set ultimate trust for the SECRETS_SOPS_UID
+        @if [ "$(origin SECRETS_SOPS_UID)" = "command line" ] && [ -n "$(SECRETS_SOPS_UID)" ]; then \
+                FPR="$$( { gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" 2>/dev/null || true; } | awk -F: '/^fpr:/ {print $$10; exit}')"; \
+                if [ -n "$${FPR}" ]; then \
+                        echo "$${FPR}:6:" | gpg --import-ownertrust; \
+                fi; \
+        fi
+.PHONY: secrets-gpg-import
 
 # Usage: make secrets-gpg-remove SECRETS_SOPS_UID=<uid>
 #
-## Remove an existing GPG key for SOPS (interactive)
+## Remove GPG keys for SOPS with the specified UID (interactive)
 secrets-gpg-remove:
-	if ! gpg --list-keys "$(SECRETS_SOPS_UID)" >/dev/null 2>&1; then
-		echo "warning: no key found for '$(SECRETS_SOPS_UID)'" >&2
-		exit 0
-	fi
-	echo "info: deleting key for '$(SECRETS_SOPS_UID)'"
-	# Delete private key first, then public key
-	gpg --yes --delete-secret-keys "$(SECRETS_SOPS_UID)"
-	gpg --yes --delete-keys "$(SECRETS_SOPS_UID)"
+        @if ! gpg --list-keys "$(SECRETS_SOPS_UID)" >/dev/null 2>&1; then
+                echo "warning: no key found for '$(SECRETS_SOPS_UID)'" >&2
+                exit 0
+        fi
+
+        # Delete private key first, then public key
+        @gpg --yes --delete-secret-keys "$(SECRETS_SOPS_UID)"
+        @gpg --yes --delete-keys "$(SECRETS_SOPS_UID)"
 .PHONY: secrets-gpg-remove
+
+# Usage: make secrets-gpg-show [SECRETS_SOPS_UID=<uid>]
+#
+## Show GPG public key information for SOPS UID or list all keys if UID is not set
+secrets-gpg-show:
+        @if [ "$(origin SECRETS_SOPS_UID)" != "command line" ]; then \
+                gpg --list-keys --keyid-format long; \
+                exit 0; \
+        fi
+
+        @FPR="$$( { gpg --list-keys --with-colons "$(SECRETS_SOPS_UID)" 2>/dev/null || true; } | awk -F: '/^fpr:/ {print $$10; exit}')"; \
+        if [ -z "$${FPR}" ]; then \
+                echo "error: no fingerprint found for UID '$(SECRETS_SOPS_UID)'" >&2; \
+                exit 1; \
+        fi; \
+        echo -e "UID: $(SECRETS_SOPS_UID)\nFingerprint: $${FPR}"
+.PHONY: secrets-gpg-show
 
 # Usage: make secrets-sops-encrypt <files>
 #
-## Encrypt file using SOPS
+## Encrypt specified files using SOPS with GPG keys
 secrets-sops-encrypt:
-	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make secrets-sops-encrypt <files>"; \
-		exit 1; \
-	fi
+        @if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+                echo "usage: make secrets-sops-encrypt <files>" >&2; \
+                exit 1; \
+        fi
 
-	export PATH="$$PATH:$(shell go env GOPATH 2>/dev/null)/bin"
-	@for file in $(filter-out $@,$(MAKECMDGOALS)); do \
-		if [ -f "$$file" ]; then \
-			sops --encrypt --in-place "$$file"; \
-		else \
-			echo "Skipping (not found): $$file" >&2; \
-		fi; \
-	done
+        @for file in $(filter-out $@,$(MAKECMDGOALS)); do \
+                if [ -f "$$file" ]; then \
+                        sops --encrypt --in-place "$$file"; \
+                fi; \
+        done
 .PHONY: secrets-sops-encrypt
 
 # Usage: make secrets-sops-decrypt <files>
 #
-## Decrypt file using SOPS
+## Decrypt specified SOPS-encrypted files using GPG keys
 secrets-sops-decrypt:
-	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make secrets-sops-encrypt <files>"; \
-		exit 1; \
-	fi
+        @if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+                echo "usage: make secrets-sops-decrypt <files>" >&2; \
+                exit 1; \
+        fi
 
-	export PATH="$$PATH:$(shell go env GOPATH 2>/dev/null)/bin"
-	@for file in $(filter-out $@,$(MAKECMDGOALS)); do \
-		if [ -f "$$file" ]; then \
-			sops --decrypt --in-place "$$file"; \
-		else \
-			echo "Skipping (not found): $$file" >&2; \
-		fi; \
-	done
+        @for file in $(filter-out $@,$(MAKECMDGOALS)); do \
+                if [ -f "$$file" ]; then \
+                        sops --decrypt --in-place "$$file"; \
+                fi; \
+        done
 .PHONY: secrets-sops-decrypt
 
 # Usage: make secrets-sops-view <file>
 #
-## View a file encrypted with SOPS
+## View decrypted contents of a SOPS-encrypted file using GPG keys
 secrets-sops-view:
-	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
-		echo "usage: make secrets-sops-view <file>"; \
-		exit 1; \
-	fi
+        @if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+                echo "usage: make secrets-sops-view <file>" >&2; \
+                exit 1; \
+        fi
 
-	export PATH="$$PATH:$(shell go env GOPATH 2>/dev/null)/bin"
-	sops --decrypt "$(filter-out $@,$(MAKECMDGOALS))"
+        sops --decrypt "$(filter-out $@,$(MAKECMDGOALS))"
 .PHONY: secrets-sops-view
 
 # ── Policy Manager ───────────────────────────────────────────────────────────────────────────────
