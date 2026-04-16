@@ -23,8 +23,9 @@ Contribution guidelines and project management tools.
   - [10.1. Conftest](#101-conftest)
 - [11. Supply Chain Manager](#11-supply-chain-manager)
   - [11.1. Trivy](#111-trivy)
-- [16. Documentation Generators](#16-documentation-generators)
-  - [16.1. Doxygen](#161-doxygen)
+- [12. Documentation Generators](#12-documentation-generators)
+  - [12.1. Doxygen](#121-doxygen)
+  - [12.2. MkDocs](#122-mkdocs)
 
 ## 1. AI Agents
 
@@ -150,10 +151,9 @@ AI Agents are automated tools that assist in various development tasks such as c
     - Tasks
 
       ```bash
-      # TODO
-      # make devcontainer-go
-      # make devcontainer-cpp
-      # make devcontainer-python
+      make devcontainer-go
+      make devcontainer-cpp
+      make devcontainer-python
       ```
 
 ## 6. Release Manager
@@ -222,7 +222,7 @@ AI Agents are automated tools that assist in various development tasks such as c
         > Generate a new key pair to be used with SOPS.
 
         > [!NOTE]
-        > The UID can be customized via the `SECRETS_SOPS_UID` variable (defaults to `sops-dx`).
+        > Customize the UID by providing the `SECRETS_SOPS_UID` variable. Default UID is `sops-<repo>`.
 
         ```bash
         make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
@@ -274,13 +274,17 @@ AI Agents are automated tools that assist in various development tasks such as c
     - CI/CD
 
       ```yaml
-      # TODO
+      uses: sentenz/actions/container@latest
       ```
 
     - Tasks
 
       ```bash
-      # TODO
+      make container-docker-build
+      ```
+
+      ```bash
+      make container-docker-run
       ```
 
 ## 10. Policy Manager
@@ -359,9 +363,9 @@ AI Agents are automated tools that assist in various development tasks such as c
       make sast-trivy-sbom-license <sbom_path>
       ```
 
-## 16. Documentation Generators
+## 12. Documentation Generators
 
-### 16.1. Doxygen
+### 12.1. Doxygen
 
 [Doxygen](https://www.doxygen.nl/) is an **API Documentation Generator** for C++, C programming languages, used to create software reference documentation from annotated source code.
 
@@ -386,4 +390,35 @@ AI Agents are automated tools that assist in various development tasks such as c
 
       ```bash
       make pages-doxygen-serve
+      ```
+
+### 12.2. MkDocs
+
+[MkDocs](https://www.mkdocs.org/) is a Static Site Generator (SSG) designed for building project documentation using Markdown files.
+
+1. Insights and Details
+
+    - [mkdocs.yml](mkdocs.yml)
+      > Configuration file for MkDocs specifying site settings, theme, plugins, and markdown extensions.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/mkdocs@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make pages-mkdocs-setup
+      ```
+
+      ```bash
+      make pages-mkdocs-build
+      ```
+
+      ```bash
+      make pages-mkdocs-serve
       ```
