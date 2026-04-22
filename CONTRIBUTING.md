@@ -66,6 +66,9 @@ AI Agents are automated tools that assist in various development tasks such as c
     - [Sentenz Skills](https://github.com/sentenz/skills)
       > Reusable AI agent skills for various development tasks.
 
+    - [skills-lock.json](skills-lock.json)
+      > Lock file for managing skill dependencies and versions.
+
 2. Usage and Instructions
 
     - Tasks

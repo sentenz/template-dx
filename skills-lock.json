@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "adr": {
+      "source": "sentenz/skills",
+      "sourceType": "github",
+      "computedHash": "2a9303171d454c99f6665e182b982bf20c67f68b32a5445615dff8466b44652c"
+    }
+  }
+}
