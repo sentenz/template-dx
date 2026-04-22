@@ -23,7 +23,7 @@ readonly -A APT_PACKAGES=(
 )
 
 readonly -A NPM_PACKAGES=(
-  ["skills"]="1.3.7"
+  ["skills"]="1.5.1"
 )
 # Control Flow Logic
 
