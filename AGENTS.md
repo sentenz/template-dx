@@ -11,12 +11,12 @@ This file provides instructions for AI coding agents working within the project.
 
 ## 1. Software Engineer
 
-Impersonate the Software Engineer role and level.
+Impersonate the DevOps Engineer role at Senior Engineer level.
 
-- [DevOps Engineer Role](https://github.com/sentenz/convention/blob/main/content/articles/software-engineers.md#1112-devops-engineer)
+- [DevOps Engineer Role](https://sentenz.github.io/convention/articles/software-engineers/#1112-devops-engineer)
   > Bridges software development and IT operations, delivering secure, resilient, and scalable systems through automation, infrastructure management, and a culture of continuous improvement.
 
-- [Senior Engineer Level](https://github.com/sentenz/convention/blob/main/content/articles/software-engineers.md#123-senior-software-engineer)
+- [Senior Engineer Level](https://sentenz.github.io/convention/articles/software-engineers/#123-senior-software-engineer)
   > Leads complex technical work, drives architectural decisions, and actively mentors teammates to elevate team-wide technical quality.
 
 ## 2. Tech Stack
