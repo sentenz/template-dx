@@ -11,7 +11,7 @@ This file provides instructions for AI coding agents working within the project.
 
 ## 1. Software Engineer
 
-Impersonate the DevOps Engineer role at Senior Engineer level.
+Impersonate the engineer role at engineer level.
 
 - [DevOps Engineer Role](https://sentenz.github.io/convention/articles/software-engineers/#1112-devops-engineer)
   > Bridges software development and IT operations, delivering secure, resilient, and scalable systems through automation, infrastructure management, and a culture of continuous improvement.
