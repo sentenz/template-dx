@@ -11,20 +11,20 @@
     "source=go-workspace-volume,target=/workspaces,type=volume"
   ],
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
+    "ghcr.io/devcontainers/features/common-utils:": {
       "installZsh": "true",
       "username": "vscode",
       "userUid": "1000",
       "userGid": "1000",
       "upgradePackages": "true"
     },
-    "ghcr.io/devcontainers/features/go:1": {
+    "ghcr.io/devcontainers/features/go:": {
       "version": "none"
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "none"
     },
-    "ghcr.io/devcontainers/features/git:1": {
+    "ghcr.io/devcontainers/features/git:": {
       "version": "latest",
       "ppa": "false"
     }

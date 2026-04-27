@@ -11,7 +11,7 @@
     "source=cpp-workspace-volume,target=/workspaces,type=volume"
   ],
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {
+    "ghcr.io/devcontainers/features/git:": {
       "version": "latest",
       "ppa": "false"
     }
