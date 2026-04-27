@@ -18,7 +18,7 @@
       "userUid": "1000",
       "userGid": "1000"
     },
-    "ghcr.io/devcontainers/features/node:1": {
+    "ghcr.io/devcontainers/features/node:": {
       "version": "none"
     },
     "ghcr.io/devcontainers/features/git:": {

@@ -21,7 +21,7 @@
     "ghcr.io/devcontainers/features/go:": {
       "version": "none"
     },
-    "ghcr.io/devcontainers/features/node:1": {
+    "ghcr.io/devcontainers/features/node:": {
       "version": "none"
     },
     "ghcr.io/devcontainers/features/git:": {
