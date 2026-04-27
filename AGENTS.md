@@ -39,19 +39,19 @@ Follow the defined directory structure when creating, moving, or referencing fil
 
 Use `make <task>` to execute project tasks. Run `make help` to list all available targets before invoking build, test, or maintenance commands.
 
-- [Makefile](Makefile)
+- [Task Runner](CONTRIBUTING.md#3-task-runner)
   > Defining tasks for building, testing, and managing the project.
 
 ## 5. Commit Strategy
 
 Write every commit message in the Conventional Commits format (`<type>(<scope>): <description>`) to enable automated changelogs and semantic version bumps.
 
-- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Release Manager](CONTRIBUTING.md#6-release-manager)
   > Specification for standardized commit message format to maintain a clear and consistent commit history.
 
 ## 6. Versioning Strategy
 
 Increment version numbers according to MAJOR.MINOR.PATCH rules: MAJOR for breaking changes, MINOR for new backward-compatible features, and PATCH for bug fixes.
 
-- [Semantic Versioning](https://semver.org/)
+- [Release Manager](CONTRIBUTING.md#6-release-manager)
   > Versioning scheme using MAJOR.MINOR.PATCH format for release management to indicate the nature of changes.
