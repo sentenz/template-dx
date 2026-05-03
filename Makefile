@@ -457,6 +457,18 @@ sast-cosign-verify:
 	docker run --rm -v "${HOME}/.docker/config.json:/root/.docker/config.json" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_COSIGN)" verify-attestation --key cosign.pub --type cyclonedx "$(filter-out $@,$(MAKECMDGOALS))" > logs/sbom/sbom.cdx.intoto.jsonl 2> logs/sast/cosign-verify.log
 .PHONY: sast-cosign-verify
 
+# ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
+
+## Initialize Lefthook Git hooks in the local repository
+githooks-lefthook-initialize:
+	lefthook install
+.PHONY: githooks-lefthook-initialize
+
+## Deinitialize Lefthook Git hooks from the local repository
+githooks-lefthook-deinitialize:
+	lefthook uninstall
+.PHONY: githooks-lefthook-deinitialize
+
 # ── Skills Manager ───────────────────────────────────────────────────────────────────────────────
 
 ## Add sentenz/skills to the project
@@ -468,3 +480,20 @@ skills-add:
 skills-update:
 	skills update sentenz/skills
 .PHONY: skills-update
+
+# ── Static Site Generator (SSG) ─────────────────────────────────────────────────────────────────
+
+### Setup documentation pages with MkDocs
+pages-mkdocs-setup:
+	@python3 -m venv .venv && . $(PIP_VENV)/activate && cd ./scripts/ && bash ./setup_pages.sh
+.PHONY: pages-mkdocs-setup
+
+## Build documentation pages with MkDocs
+pages-mkdocs-build:
+	@. $(PIP_VENV)/activate; mkdocs build
+.PHONY: pages-mkdocs-build
+
+## Serve documentation pages locally with MkDocs
+pages-mkdocs-serve:
+	@. $(PIP_VENV)/activate; mkdocs serve --dev-addr 127.0.0.1:8000
+.PHONY: pages-mkdocs-serve

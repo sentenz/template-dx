@@ -1,11 +1,12 @@
-# Template DX
+# Convention
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A Development Experience (DX) template providing a structured framework and essential tools to streamline development.
+The Convention is a collection of general articles, conventions, and guides for software development as a reference to apply standardized approaches in projects.
 
 - [1. Details](#1-details)
   - [1.1. Prerequisites](#11-prerequisites)
+  - [1.2. Usage](#12-usage)
 - [2. Contribute](#2-contribute)
 - [3. Troubleshoot](#3-troubleshoot)
   - [3.1. TODO](#31-todo)
@@ -22,14 +23,6 @@ A Development Experience (DX) template providing a structured framework and esse
   sudo apt install git
   ```
 
-- [Git LFS](https://git-lfs.com/)
-  > Git extension for managing large files (assets, binaries) outside normal Git history.
-
-  ```bash
-  sudo apt install git-lfs
-  git lfs install
-  ```
-
 - [Make](https://www.gnu.org/software/make/)
   > Task automation tool to manage build processes and workflows.
 
@@ -37,13 +30,42 @@ A Development Experience (DX) template providing a structured framework and esse
   sudo apt install make
   ```
 
-- [Docker](https://www.docker.com/)
-  > Containerization platform for running applications in isolated environments and executing container-based tasks.
+### 1.2. Usage
 
-  ```bash
-  sudo apt install docker.io
-  sudo usermod -aG docker $USER
-  ```
+ [MkDocs](https://www.mkdocs.org/) is used as the static site generator for building and serving the documentation site.
+
+1. Insights and Details
+
+    - Navigation
+      > Navigation is managed by the [mkdocs-awesome-nav](https://lukasgeiter.github.io/mkdocs-awesome-nav/) plugin.
+
+    - CommonMark Flavored Markdown
+      > A custom MkDocs hook in [mkdocs_hooks.py](scripts/python/mkdocs_hooks.py) normalizes markdown rendering behavior for CommonMark-style content and GitHub Flavored Markdown.
+
+    - Configuration
+      > The [mkdocs.yml](mkdocs.yml) file contains the configuration for the MkDocs site, including theme, plugins, and markdown extensions.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: .github/actions/mkdocs
+      ```
+
+    - Tasks
+
+      ```bash
+      make pages-mkdocs-setup
+      ```
+
+      ```bash
+      make pages-mkdocs-build
+      ```
+
+      ```bash
+      make pages-mkdocs-serve
+      ```
 
 ## 2. Contribute
 
@@ -61,26 +83,26 @@ A Development Experience (DX) template providing a structured framework and esse
 - [Bootstrap](CONTRIBUTING.md#4-bootstrap)
   > Scripts to bootstrap, setup, and teardown a software development workspace with requisites.
 
-- [Dev Containers](CONTRIBUTING.md#5-dev-containers)
+- [Git Hooks Manager](CONTRIBUTING.md#5-git-hooks-manager)
+  > Lefthook automates Git hooks for pre-commit linting and commit message validation.
+
+- [Dev Containers](CONTRIBUTING.md#6-dev-containers)
   > Consistent development environments using Docker containers.
 
-- [Release Manager](CONTRIBUTING.md#6-release-manager)
+- [Release Manager](CONTRIBUTING.md#7-release-manager)
   > Semantic-Release automates the release process by analyzing commit messages.
 
-- [Update Manager](CONTRIBUTING.md#7-update-manager)
+- [Update Manager](CONTRIBUTING.md#8-update-manager)
   > Renovate and Dependabot automate dependency updates by creating pull requests.
 
-- [Secrets Manager](CONTRIBUTING.md#8-secrets-manager)
-  > SOPS for managing and encrypting sensitive data such as passwords, API keys, and other secrets.
-
-- [Container Manager](CONTRIBUTING.md#9-container-manager)
-  > Docker containerization tool to run applications in isolated container environments.
-
-- [Policy Manager](CONTRIBUTING.md#10-policy-manager)
+- [Policy Manager](CONTRIBUTING.md#11-policy-manager)
   > Conftest for policy-as-code enforcement.
 
-- [Supply Chain Manager](CONTRIBUTING.md#11-supply-chain-manager)
+- [Supply Chain Manager](CONTRIBUTING.md#12-supply-chain-manager)
   > Trivy for security scanning of vulnerabilities, misconfigurations, and compliance issues.
+
+- [Documentation Generators](CONTRIBUTING.md#132-mkdocs)
+  > MkDocs for building and serving the documentation site.
 
 ## 3. Troubleshoot
 
@@ -91,7 +113,6 @@ TODO
 ## 4. References
 
 - Sentenz [Template DX](https://github.com/sentenz/template-dx) repository.
-- Sentenz [Template C++](https://github.com/sentenz/template-cpp) repository.
 - Sentenz [Actions](https://github.com/sentenz/actions) repository.
 - Sentenz [Skills](https://github.com/sentenz/skills) repository.
 - Sentenz [Manager Tools](https://github.com/sentenz/convention/issues/392) article.
