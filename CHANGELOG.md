@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.4.0](https://github.com/sentenz/template-dx/compare/1.3.0...1.4.0) (2026-05-03)
+
+
+### Features
+
+* add Git Hooks Manager with Lefthook integration ([88771da](https://github.com/sentenz/template-dx/commit/88771da39030a68d929a8554b4f06ee211ebdf57))
+
 # [1.3.0](https://github.com/sentenz/template-dx/compare/1.2.0...1.3.0) (2025-12-30)
 
 
