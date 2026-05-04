@@ -31,6 +31,10 @@ readonly -A TEARDOWN_MANAGER_NPM_PACKAGES=(
   ["lefthook"]=""
 )
 
+readonly -A TEARDOWN_MANAGER_GO_PACKAGES=(
+  ["go.mozilla.org/sops/cmd/sops"]=""
+)
+
 # Control Flow Logic
 
 # Initialize a software development workspace with requisites.
@@ -98,7 +102,7 @@ function bootstrap_manager_teardown() {
   pkg_npm_clean
   ((retval |= $?))
 
-  pkg_go_uninstall_list SETUP_MANAGER_GO_PACKAGES
+  pkg_go_uninstall_list TEARDOWN_MANAGER_GO_PACKAGES
   ((retval |= $?))
 
   pkg_go_clean
