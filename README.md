@@ -1,8 +1,8 @@
-# Convention
+# Template DX
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-The Convention is a collection of general articles, conventions, and guides for software development as a reference to apply standardized approaches in projects.
+A Development Experience (DX) template providing a structured framework and essential tools to streamline development.
 
 - [1. Details](#1-details)
   - [1.1. Prerequisites](#11-prerequisites)
