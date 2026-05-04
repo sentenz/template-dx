@@ -42,7 +42,7 @@ bootstrap:
 ifeq ($(IS_WINDOWS),Windows_NT)
 	$(POWERSHELL) -File ./scripts/Bootstrap.ps1
 else
-	@cd ./scripts/ && bash ./bootstrap.sh
+	@cd ./scripts/ && bash ./manager.sh bootstrap
 endif
 .PHONY: bootstrap
 
@@ -51,7 +51,7 @@ setup:
 ifeq ($(IS_WINDOWS),Windows_NT)
 	@echo "TODO Implement Windows setup task"
 else
-	@cd ./scripts/ && bash ./setup.sh
+	@cd ./scripts/ && bash ./manager.sh setup
 endif
 .PHONY: setup
 
@@ -60,7 +60,7 @@ teardown:
 ifeq ($(IS_WINDOWS),Windows_NT)
 	@echo "TODO Implement Windows teardown task"
 else
-	@cd ./scripts/ && bash ./teardown.sh
+	@cd ./scripts/ && bash ./manager.sh teardown
 endif
 .PHONY: teardown
 
