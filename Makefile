@@ -254,7 +254,12 @@ SEMGREP_SCAN_TARGETS = $(if $(strip $(SAST_SEMGREP_TARGETS)),$(SAST_SEMGREP_TARG
 sast-semgrep-scan:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/src" -w /src "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --json --output logs/sast/semgrep.json $(SEMGREP_SCAN_TARGETS) 2> logs/sast/semgrep.log || { \
+	docker run --rm \
+		-v "${PWD}:/src" \
+		-w /src \
+		"$(SAST_IMAGE_SEMGREP)" \
+		semgrep scan --config auto --error --json --output logs/sast/semgrep.json $(SEMGREP_SCAN_TARGETS) \
+		2> logs/sast/semgrep.log || { \
 		status=$$?; \
 		if [ "$$status" -eq 1 ]; then \
 			echo "Semgrep reported findings. Check logs/sast/semgrep.log for details or logs/sast/semgrep.json for full results." >&2; \
