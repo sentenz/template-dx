@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.6.0](https://github.com/sentenz/template-dx/compare/1.5.0...1.6.0) (2026-05-10)
+
+
+### Features
+
+* add semgrep and trufflehog tasks/hooks ([#37](https://github.com/sentenz/template-dx/issues/37)) ([e61bcfc](https://github.com/sentenz/template-dx/commit/e61bcfc51ce9a78b74e88658125d2295fa52674c))
+
 # [1.5.0](https://github.com/sentenz/template-dx/compare/1.4.0...1.5.0) (2026-05-10)
 
 
