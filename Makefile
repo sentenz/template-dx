@@ -252,7 +252,7 @@ SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.161.0@sha256:326e5f41cc972bb423b764a14fe
 sast-semgrep-scan:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/src" -w /src "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --no-secrets-validation --json --output logs/sast/semgrep.json .
+	docker run --rm -v "${PWD}:/src" -w /src "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --json --output logs/sast/semgrep.json .
 .PHONY: sast-semgrep-scan
 
 SAST_IMAGE_TRIVY ?= aquasec/trivy:0.68.2@sha256:05d0126976bdedcd0782a0336f77832dbea1c81b9cc5e4b3a5ea5d2ec863aca7
@@ -489,14 +489,14 @@ SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.95.2@sha256:49d1c4fbbc580a
 sast-trufflehog-fs:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" filesystem . --no-update --json --fail > logs/sast/trufflehog-filesystem.json 2>&1
+	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" filesystem . --no-update --json --fail > logs/sast/trufflehog-filesystem.json 2> logs/sast/trufflehog-filesystem.log
 .PHONY: sast-trufflehog-fs
 
 ## Scan git repository history for leaked secrets using TruffleHog and generate a report
 sast-trufflehog-git:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" git file:///pwd --no-update --json --fail > logs/sast/trufflehog-git.json 2>&1
+	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" git file:///pwd --no-update --json --fail > logs/sast/trufflehog-git.json 2> logs/sast/trufflehog-git.log
 .PHONY: sast-trufflehog-git
 
 # ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
