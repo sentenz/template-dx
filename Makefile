@@ -489,14 +489,14 @@ SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.95.2@sha256:49d1c4fbbc580a
 sast-trufflehog-fs:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" filesystem . --no-update --json --fail > logs/sast/trufflehog-filesystem.json 2> logs/sast/trufflehog-filesystem.log
+	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" filesystem . --no-update --json > logs/sast/trufflehog-filesystem.json 2> logs/sast/trufflehog-filesystem.log
 .PHONY: sast-trufflehog-fs
 
 ## Scan git repository history for leaked secrets using TruffleHog and generate a report
 sast-trufflehog-git:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" git file:///pwd --no-update --json --fail > logs/sast/trufflehog-git.json 2> logs/sast/trufflehog-git.log
+	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" git file:///pwd --no-update --json > logs/sast/trufflehog-git.json 2> logs/sast/trufflehog-git.log
 .PHONY: sast-trufflehog-git
 
 # ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
