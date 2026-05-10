@@ -464,14 +464,14 @@ SAST_IMAGE_GITLEAKS ?= ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071c
 sast-gitleaks-detect:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" detect --source /workspace --report-format json --report-path logs/sast/gitleaks-detect.json 2>&1
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" detect --redact --source /workspace --report-format json --report-path logs/sast/gitleaks-detect.json 2>&1
 .PHONY: sast-gitleaks-detect
 
 ## Scan staged git changes for leaked secrets using Gitleaks and generate a report
 sast-gitleaks-protect:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" protect --staged --source /workspace --report-format json --report-path logs/sast/gitleaks-protect.json 2>&1
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" protect --redact --staged --source /workspace --report-format json --report-path logs/sast/gitleaks-protect.json 2>&1
 .PHONY: sast-gitleaks-protect
 
 # ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
