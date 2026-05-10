@@ -246,6 +246,15 @@ policy-regal-lint:
 
 # ── SAST Manager ─────────────────────────────────────────────────────────────────────────────────
 
+SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.161.0@sha256:326e5f41cc972bb423b764a14febbb62bbad29ee1c01820805d077dd868fea48
+
+## Scan source code for security issues using Semgrep and generate a report
+sast-semgrep-scan:
+	@mkdir -p logs/sast
+
+	docker run --rm -v "${PWD}:/src" -w /src "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --no-secrets-validation --json --output logs/sast/semgrep.json .
+.PHONY: sast-semgrep-scan
+
 SAST_IMAGE_TRIVY ?= aquasec/trivy:0.68.2@sha256:05d0126976bdedcd0782a0336f77832dbea1c81b9cc5e4b3a5ea5d2ec863aca7
 
 ## Scan Infrastructure-as-Code (IaC) files for misconfigurations using Trivy and generate a report
@@ -474,41 +483,21 @@ sast-gitleaks-protect:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" protect --redact --staged --source /workspace --report-format json --report-path logs/sast/gitleaks-protect.json 2>&1
 .PHONY: sast-gitleaks-protect
 
-# ── Container Manager ────────────────────────────────────────────────────────────────────────────
+SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.95.2@sha256:49d1c4fbbc580aac487ac7cb0517bb085826bd352d7578d62bb4c0c6b7205075
 
-## Pull the Conftest container image
-container-conftest-pull:
-	docker pull "$(POLICY_IMAGE_CONFTEST)"
-.PHONY: container-conftest-pull
+## Scan local filesystem for leaked secrets using TruffleHog and generate a report
+sast-trufflehog-fs:
+	@mkdir -p logs/sast
 
-## Pull the Regal container image
-container-regal-pull:
-	docker pull "$(POLICY_IMAGE_REGAL)"
-.PHONY: container-regal-pull
+	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" filesystem . --no-update --json --fail > logs/sast/trufflehog-filesystem.json 2>&1
+.PHONY: sast-trufflehog-fs
 
-## Pull the Trivy container image
-container-trivy-pull:
-	docker pull "$(SAST_IMAGE_TRIVY)"
-.PHONY: container-trivy-pull
+## Scan git repository history for leaked secrets using TruffleHog and generate a report
+sast-trufflehog-git:
+	@mkdir -p logs/sast
 
-## Pull the Cosign container image
-container-cosign-pull:
-	docker pull "$(SAST_IMAGE_COSIGN)"
-.PHONY: container-cosign-pull
-
-## Pull the Gitleaks container image
-container-gitleaks-pull:
-	docker pull "$(SAST_IMAGE_GITLEAKS)"
-.PHONY: container-gitleaks-pull
-
-## Pull all container images used in the project
-container-pull:
-	@$(MAKE) container-conftest-pull
-	@$(MAKE) container-regal-pull
-	@$(MAKE) container-trivy-pull
-	@$(MAKE) container-cosign-pull
-	@$(MAKE) container-gitleaks-pull
-.PHONY: container-pull
+	docker run --rm -v "${PWD}:/pwd" -w /pwd "$(SAST_IMAGE_TRUFFLEHOG)" git file:///pwd --no-update --json --fail > logs/sast/trufflehog-git.json 2>&1
+.PHONY: sast-trufflehog-git
 
 # ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
 
