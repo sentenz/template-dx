@@ -13,9 +13,7 @@ pre-commit:
       skip: &skip-docker
         - run: "! which docker"
     semgrep:
-      run: >-
-        bash -c 'if [ "$#" -gt 0 ]; then make sast-semgrep-scan
-        SAST_SEMGREP_TARGETS="$*"; fi' _ {staged_files}
+      run: make sast-semgrep-scan SAST_SEMGREP_TARGETS="{staged_files}"
       skip: *skip-docker
     markdownlint:
       glob: "**/*.md"
