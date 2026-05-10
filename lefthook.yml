@@ -8,6 +8,10 @@ pre-commit:
       run: codespell {staged_files}
       skip:
         - run: "! which codespell"
+    gitleaks:
+      run: gitleaks protect --staged --redact
+      skip:
+        - run: "! which gitleaks"
     markdownlint:
       glob: "**/*.md"
       run: markdownlint-cli2 {staged_files}
