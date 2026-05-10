@@ -253,7 +253,7 @@ SAST_SEMGREP_TARGETS ?= .
 sast-semgrep-scan:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/src" -w /src "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --json --output logs/sast/semgrep.json $(SAST_SEMGREP_TARGETS) 2> logs/sast/semgrep.log
+	docker run --rm -v "${PWD}:/src" -w /src "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --json --output logs/sast/semgrep.json $(if $(strip $(SAST_SEMGREP_TARGETS)),$(SAST_SEMGREP_TARGETS),.) 2> logs/sast/semgrep.log
 .PHONY: sast-semgrep-scan
 
 SAST_IMAGE_TRIVY ?= aquasec/trivy:0.68.2@sha256:05d0126976bdedcd0782a0336f77832dbea1c81b9cc5e4b3a5ea5d2ec863aca7
