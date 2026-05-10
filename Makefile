@@ -474,6 +474,42 @@ sast-gitleaks-protect:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" protect --redact --staged --source /workspace --report-format json --report-path logs/sast/gitleaks-protect.json 2>&1
 .PHONY: sast-gitleaks-protect
 
+# ── Container Manager ────────────────────────────────────────────────────────────────────────────
+
+## Pull the Conftest container image
+container-conftest-pull:
+	docker pull "$(POLICY_IMAGE_CONFTEST)"
+.PHONY: container-conftest-pull
+
+## Pull the Regal container image
+container-regal-pull:
+	docker pull "$(POLICY_IMAGE_REGAL)"
+.PHONY: container-regal-pull
+
+## Pull the Trivy container image
+container-trivy-pull:
+	docker pull "$(SAST_IMAGE_TRIVY)"
+.PHONY: container-trivy-pull
+
+## Pull the Cosign container image
+container-cosign-pull:
+	docker pull "$(SAST_IMAGE_COSIGN)"
+.PHONY: container-cosign-pull
+
+## Pull the Gitleaks container image
+container-gitleaks-pull:
+	docker pull "$(SAST_IMAGE_GITLEAKS)"
+.PHONY: container-gitleaks-pull
+
+## Pull all container images used in the project
+container-pull:
+	@$(MAKE) container-conftest-pull
+	@$(MAKE) container-regal-pull
+	@$(MAKE) container-trivy-pull
+	@$(MAKE) container-cosign-pull
+	@$(MAKE) container-gitleaks-pull
+.PHONY: container-pull
+
 # ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
 
 ## Initialize Lefthook Git hooks in the local repository
