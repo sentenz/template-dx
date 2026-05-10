@@ -452,7 +452,7 @@ AI Agents are automated tools that assist in various development tasks such as c
       > Workflow definition for Semgrep-based static analysis in CI.
 
     - [lefthook.yml](lefthook.yml)
-      > Pre-commit hook runs the repository-wide `sast-semgrep-scan` task before every commit.
+      > Pre-commit hook runs the repository-wide `sast-semgrep-scan` task before every commit when Docker is available.
 
 2. Usage and Instructions
 
