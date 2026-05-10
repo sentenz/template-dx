@@ -256,7 +256,7 @@ sast-semgrep-scan:
 
 	docker run --rm -v "${PWD}:/src" -w /src "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --json --output logs/sast/semgrep.json $(SEMGREP_SCAN_TARGETS) 2> logs/sast/semgrep.log || { \
 		status=$$?; \
-		if [ -s logs/sast/semgrep.json ]; then \
+		if [ "$$status" -eq 1 ]; then \
 			echo "Semgrep reported findings. See logs/sast/semgrep.json and logs/sast/semgrep.log." >&2; \
 		else \
 			echo "Semgrep scan failed. See logs/sast/semgrep.log." >&2; \
