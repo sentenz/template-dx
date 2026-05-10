@@ -25,6 +25,7 @@ Contribution guidelines and project management tools.
   - [11.1. Conftest](#111-conftest)
 - [12. Supply Chain Manager](#12-supply-chain-manager)
   - [12.1. Trivy](#121-trivy)
+  - [12.2. Gitleaks](#122-gitleaks)
 - [13. Documentation Generators](#13-documentation-generators)
   - [13.1. Doxygen](#131-doxygen)
   - [13.2. MkDocs](#132-mkdocs)
@@ -389,6 +390,27 @@ AI Agents are automated tools that assist in various development tasks such as c
 
       ```bash
       make sast-trivy-sbom-license <sbom_path>
+      ```
+
+### 12.2. Gitleaks
+
+[Gitleaks](https://github.com/gitleaks/gitleaks) is a SAST tool for detecting hardcoded secrets such as passwords, API keys, and tokens in git repositories and staged changes.
+
+1. Insights and Details
+
+    - [lefthook.yml](lefthook.yml)
+      > Pre-commit hook runs `sast-gitleaks-protect` to scan staged changes before every commit.
+
+2. Usage and Instructions
+
+    - Tasks
+
+      ```bash
+      make sast-gitleaks-detect
+      ```
+
+      ```bash
+      make sast-gitleaks-protect
       ```
 
 ## 13. Documentation Generators
