@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.5.0](https://github.com/sentenz/template-dx/compare/1.4.0...1.5.0) (2026-05-10)
+
+
+### Features
+
+* add Gitleaks tasks to Makefile using official container image ([#35](https://github.com/sentenz/template-dx/issues/35)) ([d5ec1d3](https://github.com/sentenz/template-dx/commit/d5ec1d336e6b17f077a5fa2b5a9530f0291dd7bb))
+
 # [1.4.0](https://github.com/sentenz/template-dx/compare/1.3.0...1.4.0) (2026-05-03)
 
 
