@@ -26,6 +26,8 @@ Contribution guidelines and project management tools.
 - [12. Supply Chain Manager](#12-supply-chain-manager)
   - [12.1. Trivy](#121-trivy)
   - [12.2. Gitleaks](#122-gitleaks)
+  - [12.3. TruffleHog](#123-trufflehog)
+  - [12.4. Semgrep](#124-semgrep)
 - [13. Documentation Generators](#13-documentation-generators)
   - [13.1. Doxygen](#131-doxygen)
   - [13.2. MkDocs](#132-mkdocs)
@@ -411,6 +413,59 @@ AI Agents are automated tools that assist in various development tasks such as c
 
       ```bash
       make sast-gitleaks-protect
+      ```
+
+### 12.3. TruffleHog
+
+[TruffleHog](https://github.com/trufflesecurity/trufflehog) is a secret-scanning tool for detecting verified, unverified, and unknown credentials in filesystems and git repositories.
+
+1. Insights and Details
+
+    - [.github/workflows/trufflehog.yml](.github/workflows/trufflehog.yml)
+      > Workflow definition for TruffleHog-based secret scanning in CI.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: trufflesecurity/trufflehog@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make sast-trufflehog-fs
+      ```
+
+      ```bash
+      make sast-trufflehog-git
+      ```
+
+### 12.4. Semgrep
+
+[Semgrep](https://github.com/semgrep/semgrep) is a static analysis tool for detecting code security issues and enforcing secure coding patterns across source files.
+
+1. Insights and Details
+
+    - [.github/workflows/semgrep.yml](.github/workflows/semgrep.yml)
+      > Workflow definition for Semgrep-based static analysis in CI.
+
+    - [lefthook.yml](lefthook.yml)
+      > Pre-commit hook runs `sast-semgrep-scan` against staged files before every commit when Docker is available.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/semgrep@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make sast-semgrep-scan
       ```
 
 ## 13. Documentation Generators

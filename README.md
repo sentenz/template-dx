@@ -99,7 +99,7 @@ A Development Experience (DX) template providing a structured framework and esse
   > Conftest for policy-as-code enforcement.
 
 - [Supply Chain Manager](CONTRIBUTING.md#12-supply-chain-manager)
-  > Trivy for security scanning of vulnerabilities, misconfigurations, and compliance issues. Gitleaks for secret scanning in git history and staged changes.
+  > Trivy for security scanning of vulnerabilities, misconfigurations, and compliance issues. Gitleaks and TruffleHog for secret scanning. Semgrep for static analysis.
 
 - [Documentation Generators](CONTRIBUTING.md#132-mkdocs)
   > MkDocs for building and serving the documentation site.
