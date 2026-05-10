@@ -9,9 +9,9 @@ pre-commit:
       skip:
         - run: "! which codespell"
     gitleaks:
-      run: gitleaks protect --staged --redact
+      run: make sast-gitleaks-protect
       skip:
-        - run: "! which gitleaks"
+        - run: "! which docker"
     markdownlint:
       glob: "**/*.md"
       run: markdownlint-cli2 {staged_files}
