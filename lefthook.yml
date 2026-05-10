@@ -10,12 +10,11 @@ pre-commit:
         - run: "! which codespell"
     gitleaks:
       run: make sast-gitleaks-protect
-      skip:
+      skip: &skip-docker
         - run: "! which docker"
     semgrep:
       run: make sast-semgrep-scan
-      skip:
-        - run: "! which docker"
+      skip: *skip-docker
     markdownlint:
       glob: "**/*.md"
       run: markdownlint-cli2 {staged_files}
