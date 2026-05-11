@@ -516,12 +516,12 @@ githooks-lefthook-deinitialize:
 
 # ── Skills Manager ───────────────────────────────────────────────────────────────────────────────
 
-## Add sentenz/skills to the project
+## Add Agent Skills to the project
 skills-add:
 	skills add sentenz/skills
 .PHONY: skills-add
 
-## Update sentenz/skills in the project
+## Update Agent Skills in the project
 skills-update:
 	skills update sentenz/skills
 .PHONY: skills-update
