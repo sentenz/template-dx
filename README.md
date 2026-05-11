@@ -84,7 +84,7 @@ A Development Experience (DX) template providing a structured framework and esse
   > Scripts to bootstrap, setup, and teardown a software development workspace with requisites.
 
 - [Git Hooks Manager](CONTRIBUTING.md#5-git-hooks-manager)
-  > Lefthook automates Git hooks for pre-commit linting and commit message validation.
+  > Lefthook configuration for managing Git hooks to automate Git events on commit or push.
 
 - [Dev Containers](CONTRIBUTING.md#6-dev-containers)
   > Consistent development environments using Docker containers.
@@ -98,10 +98,13 @@ A Development Experience (DX) template providing a structured framework and esse
 - [Policy Manager](CONTRIBUTING.md#11-policy-manager)
   > Conftest for policy-as-code enforcement.
 
-- [Supply Chain Manager](CONTRIBUTING.md#12-supply-chain-manager)
+- [SAST Manager](CONTRIBUTING.md#12-sast-manager)
+  > Identifying security vulnerabilities and issues in source code, container images, and artifacts.
+
+- [Supply Chain Manager](CONTRIBUTING.md#13-supply-chain-manager)
   > Trivy for security scanning of vulnerabilities, misconfigurations, and compliance issues. Gitleaks and TruffleHog for secret scanning. Semgrep for static analysis.
 
-- [Documentation Generators](CONTRIBUTING.md#132-mkdocs)
+- [Documentation Generators](CONTRIBUTING.md#14-documentation-generators)
   > MkDocs for building and serving the documentation site.
 
 ## 3. Troubleshoot
