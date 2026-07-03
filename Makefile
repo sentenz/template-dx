@@ -84,8 +84,44 @@ else
 endif
 .PHONY: lint-pwsh-analyze
 
+# ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
+
+## Initialize Lefthook Git hooks in the local repository
+githooks-lefthook-initialize:
+	lefthook install --force
+.PHONY: githooks-lefthook-initialize
+
+## Deinitialize Lefthook Git hooks from the local repository
+githooks-lefthook-deinitialize:
+	lefthook uninstall
+.PHONY: githooks-lefthook-deinitialize
+
+# ── Skills Manager ───────────────────────────────────────────────────────────────────────────────
+
+## Provision new Agent Skills into the project environment
+skills-agent-add:
+	skills add skills add sentenz/skills
+.PHONY: skills-agent-add
+
+## Synchronize and update existing Agent Skills in the project environment
+skills-agent-update:
+	skills update skills add sentenz/skills
+.PHONY: skills-agent-update
+
+# ── Dependency Manager ───────────────────────────────────────────────────────────────────────────
+
+DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:43.225.0@sha256:d5a3ed86911403b2e3b82fdc3784d1e2d5817bf9a417bb68f148068a200a6731
+
+## Update project dependencies locally using Renovate and generate a report
+dependency-renovate-update:
+	@mkdir -p logs/dependency
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace -e LOG_LEVEL=debug "$(DEPENDENCY_IMAGE_RENOVATE)" renovate --platform=local --repository-cache=reset > logs/dependency/renovate.log 2>&1
+.PHONY: dependency-renovate-update
+
 # ── Secrets Manager ──────────────────────────────────────────────────────────────────────────────
 
+SECRETS_IMAGE_SOPS ?= ghcr.io/getsops/sops:v3.13.1@sha256:320f253aced1393537b1e90c77eb48295204d805d4c68933264cd1285192465d
 SECRETS_SOPS_UID ?= sops-dx
 
 # Usage: make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
@@ -168,7 +204,7 @@ secrets-gpg-show:
 
 # Usage: make secrets-sops-encrypt <files>
 #
-## Encrypt specified files using SOPS with GPG keys
+## Encrypt specified files using SOPS with GPG keys, writing output to <file>.enc
 secrets-sops-encrypt:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make secrets-sops-encrypt <files>" >&2; \
@@ -177,14 +213,16 @@ secrets-sops-encrypt:
 
 	@for file in $(filter-out $@,$(MAKECMDGOALS)); do \
 		if [ -f "$$file" ]; then \
-			sops --encrypt --in-place "$$file"; \
+			docker run --rm -v "${PWD}:/workspace" -v "$${HOME}/.gnupg:/root/.gnupg" -w /workspace $(SECRETS_IMAGE_SOPS) encrypt --output "$$file.enc" "$$file"; \
+		else \
+			echo "file not found: $$file" >&2; \
 		fi; \
 	done
 .PHONY: secrets-sops-encrypt
 
 # Usage: make secrets-sops-decrypt <files>
 #
-## Decrypt specified SOPS-encrypted files using GPG keys
+## Decrypt specified SOPS-encrypted files (expects <file>.enc), writing output to <file>
 secrets-sops-decrypt:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "usage: make secrets-sops-decrypt <files>" >&2; \
@@ -192,9 +230,17 @@ secrets-sops-decrypt:
 	fi
 
 	@for file in $(filter-out $@,$(MAKECMDGOALS)); do \
-		if [ -f "$$file" ]; then \
-			sops --decrypt --in-place "$$file"; \
-		fi; \
+		case "$$file" in \
+			*.enc) \
+				if [ -f "$$file" ]; then \
+					out="$${file%.enc}"; \
+					docker run --rm -v "${PWD}:/workspace" -v "$${HOME}/.gnupg:/root/.gnupg" -w /workspace $(SECRETS_IMAGE_SOPS) decrypt --filename-override "$$out" --output "$$out" "$$file"; \
+				else \
+					echo "skip: $$file not found" >&2; \
+				fi ;; \
+			*) \
+				echo "skip: $$file has no .enc extension" >&2 ;; \
+		esac; \
 	done
 .PHONY: secrets-sops-decrypt
 
@@ -207,12 +253,12 @@ secrets-sops-view:
 		exit 1; \
 	fi
 
-	sops --decrypt "$(filter-out $@,$(MAKECMDGOALS))"
+	docker run --rm -v "${PWD}:/workspace" -v "$${HOME}/.gnupg:/root/.gnupg" -w /workspace $(SECRETS_IMAGE_SOPS) decrypt "$(filter-out $@,$(MAKECMDGOALS))"
 .PHONY: secrets-sops-view
 
 # ── Policy Manager ───────────────────────────────────────────────────────────────────────────────
 
-POLICY_IMAGE_CONFTEST ?= docker.io/openpolicyagent/conftest:v0.65.0@sha256:afa510df6d4562ebe24fb3e457da6f6d6924124140a13b51b950cc6cb1d25525
+POLICY_IMAGE_CONFTEST ?= docker.io/openpolicyagent/conftest:v0.68.2@sha256:5fd81e332d7e4bc01daf3ef35371800a9a9720a30c0c37a78de0c5fbe4b6d622
 
 # Usage: make policy-conftest-test <filepath>
 #
@@ -228,7 +274,7 @@ policy-conftest-test:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_CONFTEST)" test "$(filter-out $@,$(MAKECMDGOALS))" > logs/policy/conftest-report.json 2>&1
 .PHONY: policy-conftest-test
 
-POLICY_IMAGE_REGAL ?= ghcr.io/openpolicyagent/regal:0.37.0@sha256:a09884658f3c8c9cc30de136b664b3afdb7927712927184ba891a155a9676050
+POLICY_IMAGE_REGAL ?= ghcr.io/open-policy-agent/regal:0.41.1@sha256:31cbb4cde63a4191feb42f69844cf32b8e5559df05cd265fcb83b95f608114d5
 
 # Usage: make policy-regal-lint <filepath>
 #
@@ -239,32 +285,44 @@ policy-regal-lint:
 		exit 1; \
 	fi
 
-	@mkdir -p logs/analysis
+	@mkdir -p logs/policy
 
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" regal lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/analysis/regal.json 2>&1
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_REGAL)" lint "$(filter-out $@,$(MAKECMDGOALS))" --format json > logs/policy/regal.json 2>&1
 .PHONY: policy-regal-lint
+
+# ── Static Analysis ──────────────────────────────────────────────────────────────────────────────
+
+LINT_IMAGE_MARKDOWNLINT ?= davidanson/markdownlint-cli2:0.22.1@sha256:0ed9a5f4c77ef447da2a2ac6e67caf74b214a7f80288819565e8b7d2ac148fe5
+LINT_FILES_MARKDOWNLINT ?= "**/*.md"
+
+## Lint Markdown files using markdownlint and generate a report
+lint-markdown:
+	@mkdir -p logs/lint
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(LINT_IMAGE_MARKDOWNLINT)" $(LINT_FILES_MARKDOWNLINT) > logs/lint/markdownlint 2>&1
+.PHONY: lint-markdown
 
 # ── SAST Manager ─────────────────────────────────────────────────────────────────────────────────
 
-SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.161.0@sha256:326e5f41cc972bb423b764a14febbb62bbad29ee1c01820805d077dd868fea48
-
-SAST_SEMGREP_TARGETS ?= .
-SEMGREP_SCAN_TARGETS = $(if $(strip $(SAST_SEMGREP_TARGETS)),$(SAST_SEMGREP_TARGETS),.)
+SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.166.0@sha256:c180f0c93a17b420c0af5006214a29d3c747c5459c732b740191adf657dd0068
+SAST_FILES_SEMGREP ?= .
+SAST_REGEX_SEMGREP = $(if $(strip $(SAST_FILES_SEMGREP)),$(SAST_FILES_SEMGREP),.)
 
 ## Scan source code for security issues using Semgrep and generate a report
 sast-semgrep-scan:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/src" -w /src "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --json --output logs/sast/semgrep.json $(SEMGREP_SCAN_TARGETS) 2> logs/sast/semgrep.log
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --json --output logs/sast/semgrep.json $(SAST_REGEX_SEMGREP) 2> logs/sast/semgrep.log
 .PHONY: sast-semgrep-scan
 
-SAST_IMAGE_TRIVY ?= aquasec/trivy:0.68.2@sha256:05d0126976bdedcd0782a0336f77832dbea1c81b9cc5e4b3a5ea5d2ec863aca7
+SAST_IMAGE_TRIVY ?= aquasec/trivy:0.71.1@sha256:53570e6911c2361ebe7995228088cf83a6b9b73e7f3cdca44bd8f8f425e80fa7
+SAST_FILES_TRIVY ?= .
 
 ## Scan Infrastructure-as-Code (IaC) files for misconfigurations using Trivy and generate a report
 sast-trivy-misconfig:
 	@mkdir -p logs/sast
 
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" config --output logs/sast/trivy-misconfig.json /workspace 2>&1
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" config --output logs/sast/trivy-misconfig.json $(SAST_FILES_TRIVY) 2>&1
 .PHONY: sast-trivy-misconfig
 
 ## Scan local filesystem for vulnerabilities and misconfigurations using Trivy
@@ -425,6 +483,40 @@ sast-trivy-kubernetes:
 	docker run --rm -v "${HOME}/.kube/config:/root/.kube/config" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRIVY)" kubernetes --output logs/sast/trivy-kubernetes.json $(if $(filter-out $@,$(MAKECMDGOALS)),$(filter-out $@,$(MAKECMDGOALS)),cluster) 2>&1
 .PHONY: sast-trivy-kubernetes
 
+SAST_IMAGE_GITLEAKS ?= ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f
+
+## Scan git repository history for leaked secrets using Gitleaks and generate a report
+sast-gitleaks-detect:
+	@mkdir -p logs/sast
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" detect --redact --source /workspace --report-format json --report-path logs/sast/gitleaks-detect.json 2>&1
+.PHONY: sast-gitleaks-detect
+
+## Scan staged git changes for leaked secrets using Gitleaks and generate a report
+sast-gitleaks-staged:
+	@mkdir -p logs/sast
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" protect --redact --staged --source /workspace --report-format json --report-path logs/sast/gitleaks-protect.json 2>&1
+.PHONY: sast-gitleaks-staged
+
+SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.95.5@sha256:56c25710275c4b8d74c4f1346a5e7c606fa7ff4afe996f680b288d0fae3fcd9c
+
+## Scan local filesystem for leaked secrets using TruffleHog and generate a report
+sast-trufflehog-fs:
+	@mkdir -p logs/sast
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRUFFLEHOG)" filesystem . --no-update --json > logs/sast/trufflehog-filesystem.json 2> logs/sast/trufflehog-filesystem.log
+.PHONY: sast-trufflehog-fs
+
+## Scan git repository history for leaked secrets using TruffleHog and generate a report
+sast-trufflehog-git:
+	@mkdir -p logs/sast
+
+	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRUFFLEHOG)" git file:///workspace --no-update --json > logs/sast/trufflehog-git.json 2> logs/sast/trufflehog-git.log
+.PHONY: sast-trufflehog-git
+
+# ── Supply Chain Security ────────────────────────────────────────────────────────────────────────
+
 SAST_IMAGE_COSIGN ?= cgr.dev/chainguard/cosign:3.0.0@sha256:b6bc266358e9368be1b3d01fca889b78d5ad5a47832986e14640c34a237ef638
 
 ## Generate Cosign key pair
@@ -470,61 +562,6 @@ sast-cosign-verify:
 	docker run --rm -v "${HOME}/.docker/config.json:/root/.docker/config.json" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_COSIGN)" verify-attestation --key cosign.pub --type cyclonedx "$(filter-out $@,$(MAKECMDGOALS))" > logs/sbom/sbom.cdx.intoto.jsonl 2> logs/sast/cosign-verify.log
 .PHONY: sast-cosign-verify
 
-SAST_IMAGE_GITLEAKS ?= ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f
-
-## Scan git repository history for leaked secrets using Gitleaks and generate a report
-sast-gitleaks-detect:
-	@mkdir -p logs/sast
-
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" detect --redact --source /workspace --report-format json --report-path logs/sast/gitleaks-detect.json 2>&1
-.PHONY: sast-gitleaks-detect
-
-## Scan staged git changes for leaked secrets using Gitleaks and generate a report
-sast-gitleaks-protect:
-	@mkdir -p logs/sast
-
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" protect --redact --staged --source /workspace --report-format json --report-path logs/sast/gitleaks-protect.json 2>&1
-.PHONY: sast-gitleaks-protect
-
-SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.95.2@sha256:49d1c4fbbc580aac487ac7cb0517bb085826bd352d7578d62bb4c0c6b7205075
-
-## Scan local filesystem for leaked secrets using TruffleHog and generate a report
-sast-trufflehog-fs:
-	@mkdir -p logs/sast
-
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRUFFLEHOG)" filesystem . --no-update --json > logs/sast/trufflehog-filesystem.json 2> logs/sast/trufflehog-filesystem.log
-.PHONY: sast-trufflehog-fs
-
-## Scan git repository history for leaked secrets using TruffleHog and generate a report
-sast-trufflehog-git:
-	@mkdir -p logs/sast
-
-	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_TRUFFLEHOG)" git file:///workspace --no-update --json > logs/sast/trufflehog-git.json 2> logs/sast/trufflehog-git.log
-.PHONY: sast-trufflehog-git
-
-# ── Git Hooks Manager ────────────────────────────────────────────────────────────────────────────
-
-## Initialize Lefthook Git hooks in the local repository
-githooks-lefthook-initialize:
-	lefthook install
-.PHONY: githooks-lefthook-initialize
-
-## Deinitialize Lefthook Git hooks from the local repository
-githooks-lefthook-deinitialize:
-	lefthook uninstall
-.PHONY: githooks-lefthook-deinitialize
-
-# ── Skills Manager ───────────────────────────────────────────────────────────────────────────────
-
-## Add sentenz/skills to the project
-skills-add:
-	skills add sentenz/skills
-.PHONY: skills-add
-
-## Update sentenz/skills in the project
-skills-update:
-	skills update sentenz/skills
-.PHONY: skills-update
 
 # ── Static Site Generator (SSG) ─────────────────────────────────────────────────────────────────
 
@@ -540,5 +577,22 @@ pages-mkdocs-build:
 
 ## Serve documentation pages locally with MkDocs
 pages-mkdocs-serve:
-	@. $(PIP_VENV)/activate; mkdocs serve --dev-addr 127.0.0.1:8000
+	@. $(PIP_VENV)/activate; mkdocs serve --dev-addr 127.0.0.1:8000 --livereload
 .PHONY: pages-mkdocs-serve
+
+# ── Documentation Generators ─────────────────────────────────────────────────────────────────────
+
+## Build content using Static Site Generator (SSG) for Doxygen documentation
+pages-doxygen-build:
+	@doxygen Doxyfile
+.PHONY: pages-doxygen-build
+
+## Serve the build Static Site Generator (SSG) for Doxygen documentation on a local web server
+pages-doxygen-serve:
+	@OUT="$$(awk -F'= *' '/^OUTPUT_DIRECTORY/ {gsub(/^[ \t]+|[ \t]+$$/,"",$$2); print $$2; exit}' Doxyfile 2>/dev/null)"; \
+	HTML="$$(awk -F'= *' '/^HTML_OUTPUT/ {gsub(/^[ \t]+|[ \t]+$$/,"",$$2); print $$2; exit}' Doxyfile 2>/dev/null)"; \
+	OUTDIR="$${OUT:+$${OUT}/}$${HTML:-html}"; \
+	if [ ! -d "$$OUTDIR" ]; then echo "error: generated docs not found in $$OUTDIR; run 'make pages-doxygen-generate' first" >&2; exit 1; fi; \
+	echo "Serving $$OUTDIR at http://localhost:8000"; \
+	python3 -m http.server --directory "$$OUTDIR" 8000
+.PHONY: pages-doxygen-serve
