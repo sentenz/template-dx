@@ -100,12 +100,12 @@ githooks-lefthook-deinitialize:
 
 ## Provision new Agent Skills into the project environment
 skills-agent-add:
-	skills add skills add sentenz/skills
+	skills add sentenz/skills
 .PHONY: skills-agent-add
 
 ## Synchronize and update existing Agent Skills in the project environment
 skills-agent-update:
-	skills update skills add sentenz/skills
+	skills update sentenz/skills
 .PHONY: skills-agent-update
 
 # ── Dependency Manager ───────────────────────────────────────────────────────────────────────────
