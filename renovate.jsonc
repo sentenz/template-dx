@@ -37,6 +37,19 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": "Update container image references in GitHub Actions files",
+      "managerFilePatterns": [
+        "**/**/[^/]+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "(?<depName>(?:(?:[A-Za-z0-9.-]+(?::[0-9]+)?/)?[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*)):(?<currentValue>[^@\\s\"']+)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
+      ],
+      "autoReplaceStringTemplate": "{{{depName}}}:{{{newValue}}}{{#if newDigest}}@{{{newDigest}}}{{else}}{{#if currentDigest}}@{{{currentDigest}}}{{/if}}{{/if}}",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
       "description": "Update container image references in Makefiles",
       "managerFilePatterns": [
         "**/[Mm]akefile",
@@ -120,6 +133,31 @@
       "groupName": "makefile container images",
       "groupSlug": "makefile-container-images",
       "automerge": false
+    },
+    {
+      "description": "Container image tag and digest updates in GitHub Actions files.",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchFileNames": [
+        "**/*.ya?ml",
+        "**/**/*.ya?ml"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "groupName": "github actions container images",
+      "groupSlug": "github-actions-container-images",
+      "automerge": false,
+      "semanticCommits": "enabled",
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "templates"
     }
   ]
 }
