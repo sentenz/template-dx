@@ -232,14 +232,11 @@ secrets-sops-decrypt:
 	@for file in $(filter-out $@,$(MAKECMDGOALS)); do \
 		case "$$file" in \
 			*.enc) \
-				if [ -f "$$file" ]; then \
-					out="$${file%.enc}"; \
-					docker run --rm -v "${PWD}:/workspace" -v "$${HOME}/.gnupg:/root/.gnupg" -w /workspace $(SECRETS_IMAGE_SOPS) decrypt --filename-override "$$out" --output "$$out" "$$file"; \
-				else \
-					echo "skip: $$file not found" >&2; \
-				fi ;; \
+				docker run --rm -v "${PWD}:/workspace" -v "$${HOME}/.gnupg:/root/.gnupg" -w /workspace $(SECRETS_IMAGE_SOPS) decrypt --filename-override "$${file%.enc}" --output "$${file%.enc}" "$$file"; \
+				;; \
 			*) \
-				echo "skip: $$file has no .enc extension" >&2 ;; \
+				docker run --rm -v "${PWD}:/workspace" -v "$${HOME}/.gnupg:/root/.gnupg" -w /workspace $(SECRETS_IMAGE_SOPS) decrypt --in-place "$$file"; \
+				;; \
 		esac; \
 	done
 .PHONY: secrets-sops-decrypt

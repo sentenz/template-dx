@@ -4,6 +4,13 @@
 logs/
 *.log
 
+# Ignore dotenv files (unencrypted), allow encrypted files with .enc
+.env
+.env.*
+!.env.enc
+!.env.*.enc
+
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
