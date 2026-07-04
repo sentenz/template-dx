@@ -32,39 +32,23 @@ A Development Experience (DX) template providing a structured framework and esse
 
 ### 1.2. Usage
 
- [MkDocs](https://www.mkdocs.org/) is used as the static site generator for building and serving the documentation site.
-
 1. Insights and Details
 
-    - Navigation
-      > Navigation is managed by the [mkdocs-awesome-nav](https://lukasgeiter.github.io/mkdocs-awesome-nav/) plugin.
-
-    - CommonMark Flavored Markdown
-      > A custom MkDocs hook in [mkdocs_hooks.py](scripts/python/mkdocs_hooks.py) normalizes markdown rendering behavior for CommonMark-style content and GitHub Flavored Markdown.
-
-    - Configuration
-      > The [mkdocs.yml](mkdocs.yml) file contains the configuration for the MkDocs site, including theme, plugins, and markdown extensions.
+    - TODO
+      > Brief description of the features.
 
 2. Usage and Instructions
 
     - CI/CD
 
       ```yaml
-      uses: .github/actions/mkdocs
+      uses: .github/actions
       ```
 
     - Tasks
 
       ```bash
-      make pages-mkdocs-setup
-      ```
-
-      ```bash
-      make pages-mkdocs-build
-      ```
-
-      ```bash
-      make pages-mkdocs-serve
+      make <task>
       ```
 
 ## 2. Contribute
@@ -83,8 +67,11 @@ A Development Experience (DX) template providing a structured framework and esse
 - [Bootstrap](CONTRIBUTING.md#4-bootstrap)
   > Scripts to bootstrap, setup, and teardown a software development workspace with requisites.
 
+- [Secrets Manager](CONTRIBUTING.md#9-secrets-manager)
+  > Manage and secure sensitive information such as API keys, passwords, and certificates.
+
 - [Git Hooks Manager](CONTRIBUTING.md#5-git-hooks-manager)
-  > Lefthook automates Git hooks for pre-commit linting and commit message validation.
+  > Lefthook configuration for managing Git hooks to automate Git events on commit or push.
 
 - [Dev Containers](CONTRIBUTING.md#6-dev-containers)
   > Consistent development environments using Docker containers.
@@ -98,10 +85,13 @@ A Development Experience (DX) template providing a structured framework and esse
 - [Policy Manager](CONTRIBUTING.md#11-policy-manager)
   > Conftest for policy-as-code enforcement.
 
-- [Supply Chain Manager](CONTRIBUTING.md#12-supply-chain-manager)
-  > Trivy for security scanning of vulnerabilities, misconfigurations, and compliance issues. Gitleaks and TruffleHog for secret scanning. Semgrep for static analysis.
+- [SAST Manager](CONTRIBUTING.md#12-sast-manager)
+  > Identifying security vulnerabilities and issues in source code, container images, and artifacts.
 
-- [Documentation Generators](CONTRIBUTING.md#132-mkdocs)
+- [Supply Chain Manager](CONTRIBUTING.md#13-supply-chain-manager)
+  > Software Supply Chain Security for identifying vulnerabilities in dependencies by scanning SBOMs, container images, filesystems, and compliance issues.
+
+- [Documentation Generators](CONTRIBUTING.md#14-documentation-generators)
   > MkDocs for building and serving the documentation site.
 
 ## 3. Troubleshoot

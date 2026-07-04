@@ -17,20 +17,21 @@ Contribution guidelines and project management tools.
 - [8. Update Manager](#8-update-manager)
   - [8.1. Renovate](#81-renovate)
   - [8.2. Dependabot](#82-dependabot)
-- [8. Secrets Manager](#8-secrets-manager)
+- [9. Secrets Manager](#9-secrets-manager)
   - [9.1. SOPS](#91-sops)
 - [10. Container Manager](#10-container-manager)
   - [10.1. Docker](#101-docker)
 - [11. Policy Manager](#11-policy-manager)
   - [11.1. Conftest](#111-conftest)
-- [12. Supply Chain Manager](#12-supply-chain-manager)
-  - [12.1. Trivy](#121-trivy)
-  - [12.2. Gitleaks](#122-gitleaks)
-  - [12.3. TruffleHog](#123-trufflehog)
-  - [12.4. Semgrep](#124-semgrep)
-- [13. Documentation Generators](#13-documentation-generators)
-  - [13.1. Doxygen](#131-doxygen)
-  - [13.2. MkDocs](#132-mkdocs)
+- [12. SAST Manager](#12-sast-manager)
+  - [12.1. Gitleaks](#121-gitleaks)
+  - [12.2. TruffleHog](#122-trufflehog)
+  - [12.3. Semgrep](#123-semgrep)
+- [13. Supply Chain Manager](#13-supply-chain-manager)
+  - [13.1. Trivy](#131-trivy)
+- [14. Documentation Generators](#14-documentation-generators)
+  - [14.1. Doxygen](#141-doxygen)
+  - [14.2. MkDocs](#142-mkdocs)
 
 ## 1. AI Agents
 
@@ -156,7 +157,7 @@ AI Agents are automated tools that assist in various development tasks such as c
 1. Insights and Details
 
     - [lefthook.yml](lefthook.yml)
-      > Configuration file for Lefthook defining Git hooks for `pre-commit` and `commit-msg`.
+      > Configuration file for Lefthook specifying Git hooks and associated commands.
 
 2. Usage and Instructions
 
@@ -234,7 +235,7 @@ AI Agents are automated tools that assist in various development tasks such as c
     - [.github/dependabot.yml](.github/dependabot.yml)
       > Configuration file for Dependabot specifying update rules and schedules.
 
-## 8. Secrets Manager
+## 9. Secrets Manager
 
 ### 9.1. SOPS
 
@@ -354,9 +355,95 @@ AI Agents are automated tools that assist in various development tasks such as c
       make policy-conftest-test <filepath>
       ```
 
-## 12. Supply Chain Manager
+## 12. SAST Manager
 
-### 12.1. Trivy
+SAST (Static Application Security Testing) tools for identifying security vulnerabilities and issues in source code, container images, and artifacts.
+
+### 12.1. Gitleaks
+
+[Gitleaks](https://github.com/gitleaks/gitleaks) is a SAST tool for detecting hardcoded secrets such as passwords, API keys, and tokens in git repositories and staged changes.
+
+1. Insights and Details
+
+    - [lefthook.yml](lefthook.yml)
+      > Pre-commit hook runs `sast-gitleaks-protect` to scan staged changes before every commit.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      - component: sentenz/actions/gitleaks@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make sast-gitleaks-detect
+      ```
+
+      ```bash
+      make sast-gitleaks-protect
+      ```
+
+### 12.2. TruffleHog
+
+[TruffleHog](https://github.com/trufflesecurity/trufflehog) is a secret-scanning tool for detecting verified, unverified, and unknown credentials in filesystems and git repositories.
+
+1. Insights and Details
+
+    - [.github/workflows/trufflehog.yml](.github/workflows/trufflehog.yml)
+      > Workflow definition for TruffleHog-based secret scanning in CI.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: trufflesecurity/trufflehog@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make sast-trufflehog-fs
+      ```
+
+      ```bash
+      make sast-trufflehog-git
+      ```
+
+### 12.3. Semgrep
+
+[Semgrep](https://github.com/semgrep/semgrep) is a static analysis tool for detecting code security issues and enforcing secure coding patterns across source files.
+
+1. Insights and Details
+
+    - [.github/workflows/semgrep.yml](.github/workflows/semgrep.yml)
+      > Workflow definition for Semgrep-based static analysis in CI.
+
+    - [lefthook.yml](lefthook.yml)
+      > Pre-commit hook runs `sast-semgrep-scan` against staged files before every commit when Docker is available.
+
+2. Usage and Instructions
+
+    - CI/CD
+
+      ```yaml
+      uses: sentenz/actions/semgrep@latest
+      ```
+
+    - Tasks
+
+      ```bash
+      make sast-semgrep-scan
+      ```
+
+## 13. Supply Chain Manager
+
+Software Supply Chain Security for identifying vulnerabilities in dependencies by scanning SBOMs, container images, and filesystems.
+
+### 13.1. Trivy
 
 [Trivy](https://github.com/aquasecurity/trivy) is a comprehensive security scanner for vulnerabilities, misconfigurations, and compliance issues in container images, filesystems, and source code.
 
@@ -394,83 +481,9 @@ AI Agents are automated tools that assist in various development tasks such as c
       make sast-trivy-sbom-license <sbom_path>
       ```
 
-### 12.2. Gitleaks
+## 14. Documentation Generators
 
-[Gitleaks](https://github.com/gitleaks/gitleaks) is a SAST tool for detecting hardcoded secrets such as passwords, API keys, and tokens in git repositories and staged changes.
-
-1. Insights and Details
-
-    - [lefthook.yml](lefthook.yml)
-      > Pre-commit hook runs `sast-gitleaks-protect` to scan staged changes before every commit.
-
-2. Usage and Instructions
-
-    - Tasks
-
-      ```bash
-      make sast-gitleaks-detect
-      ```
-
-      ```bash
-      make sast-gitleaks-protect
-      ```
-
-### 12.3. TruffleHog
-
-[TruffleHog](https://github.com/trufflesecurity/trufflehog) is a secret-scanning tool for detecting verified, unverified, and unknown credentials in filesystems and git repositories.
-
-1. Insights and Details
-
-    - [.github/workflows/trufflehog.yml](.github/workflows/trufflehog.yml)
-      > Workflow definition for TruffleHog-based secret scanning in CI.
-
-2. Usage and Instructions
-
-    - CI/CD
-
-      ```yaml
-      uses: trufflesecurity/trufflehog@latest
-      ```
-
-    - Tasks
-
-      ```bash
-      make sast-trufflehog-fs
-      ```
-
-      ```bash
-      make sast-trufflehog-git
-      ```
-
-### 12.4. Semgrep
-
-[Semgrep](https://github.com/semgrep/semgrep) is a static analysis tool for detecting code security issues and enforcing secure coding patterns across source files.
-
-1. Insights and Details
-
-    - [.github/workflows/semgrep.yml](.github/workflows/semgrep.yml)
-      > Workflow definition for Semgrep-based static analysis in CI.
-
-    - [lefthook.yml](lefthook.yml)
-      > Pre-commit hook runs `sast-semgrep-scan` against staged files before every commit when Docker is available.
-
-2. Usage and Instructions
-
-    - CI/CD
-
-      ```yaml
-      uses: sentenz/actions/semgrep@latest
-      ```
-
-    - Tasks
-
-      ```bash
-      make sast-semgrep-scan
-      ```
-
-## 13. Documentation Generators
-
-### 13.1. Doxygen
+### 14.1. Doxygen
 
 [Doxygen](https://www.doxygen.nl/) is an **API Documentation Generator** for C++, C programming languages, used to create software reference documentation from annotated source code.
 
@@ -497,7 +510,7 @@ AI Agents are automated tools that assist in various development tasks such as c
       make pages-doxygen-serve
       ```
 
-### 13.2. MkDocs
+### 14.2. MkDocs
 
 [MkDocs](https://www.mkdocs.org/) is a Static Site Generator (SSG) designed for building project documentation using Markdown files.
 
