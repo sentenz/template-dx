@@ -116,7 +116,7 @@ DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:43.225.0@sha256:d5a3ed8
 dependency-renovate-update:
 	@mkdir -p logs/dependency
 
-	docker run --rm -v "${PWD}:/workspace" -w /workspace -e LOG_LEVEL=debug "$(DEPENDENCY_IMAGE_RENOVATE)" renovate --platform=local --repository-cache=reset > logs/dependency/renovate.log 2>&1
+	docker run --rm -v "${PWD}:/workspace" -w /workspace -e LOG_LEVEL=debug -e RENOVATE_REPOSITORIES -e RENOVATE_TOKEN=$(RENOVATE_TOKEN) "$(DEPENDENCY_IMAGE_RENOVATE)" renovate --platform=local --repository-cache=reset > logs/dependency/renovate.log 2>&1
 .PHONY: dependency-renovate-update
 
 # ── Secrets Manager ──────────────────────────────────────────────────────────────────────────────
