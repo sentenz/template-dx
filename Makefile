@@ -110,7 +110,7 @@ skills-agent-update:
 
 # ── Dependency Manager ───────────────────────────────────────────────────────────────────────────
 
-DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:43.225.0@sha256:d5a3ed86911403b2e3b82fdc3784d1e2d5817bf9a417bb68f148068a200a6731
+DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:43.251.3@sha256:e5c59392e4fc8279e2034773f356c06e0a5ffc0c5ad97ab9c2edc1d9944fb9af
 
 ## Update project dependencies locally using Renovate and generate a report
 dependency-renovate-update:
@@ -301,7 +301,7 @@ lint-markdown:
 
 # ── SAST Manager ─────────────────────────────────────────────────────────────────────────────────
 
-SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.166.0@sha256:c180f0c93a17b420c0af5006214a29d3c747c5459c732b740191adf657dd0068
+SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.168.0@sha256:59fbed6127ea7c5dde3ba6a85142733bb20ea9aaa36120c953904f1539aaf66e
 SAST_FILES_SEMGREP ?= .
 SAST_REGEX_SEMGREP = $(if $(strip $(SAST_FILES_SEMGREP)),$(SAST_FILES_SEMGREP),.)
 
@@ -312,7 +312,7 @@ sast-semgrep-scan:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --json --output logs/sast/semgrep.json $(SAST_REGEX_SEMGREP) 2> logs/sast/semgrep.log
 .PHONY: sast-semgrep-scan
 
-SAST_IMAGE_TRIVY ?= aquasec/trivy:0.71.1@sha256:53570e6911c2361ebe7995228088cf83a6b9b73e7f3cdca44bd8f8f425e80fa7
+SAST_IMAGE_TRIVY ?= aquasec/trivy:0.72.0@sha256:cffe3f5161a47a6823fbd23d985795b3ed72a4c806da4c4df16266c02accdd6f
 SAST_FILES_TRIVY ?= .
 
 ## Scan Infrastructure-as-Code (IaC) files for misconfigurations using Trivy and generate a report
@@ -496,7 +496,7 @@ sast-gitleaks-staged:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_GITLEAKS)" protect --redact --staged --source /workspace --report-format json --report-path logs/sast/gitleaks-protect.json 2>&1
 .PHONY: sast-gitleaks-staged
 
-SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.95.5@sha256:56c25710275c4b8d74c4f1346a5e7c606fa7ff4afe996f680b288d0fae3fcd9c
+SAST_IMAGE_TRUFFLEHOG ?= trufflesecurity/trufflehog:3.95.8@sha256:d52e62fe0237bf0199cb79f94593051300b0989d9aeab8b431001d9f75e469c1
 
 ## Scan local filesystem for leaked secrets using TruffleHog and generate a report
 sast-trufflehog-fs:
