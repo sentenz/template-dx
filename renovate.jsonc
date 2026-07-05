@@ -39,7 +39,7 @@
       "customType": "regex",
       "description": "Update container image references in GitHub Actions files",
       "managerFilePatterns": [
-        "**/**/[^/]+\\.ya?ml$/"
+        "**/action.ya?ml$"
       ],
       "matchStrings": [
         "(?<depName>(?:(?:[A-Za-z0-9.-]+(?::[0-9]+)?/)?[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*)):(?<currentValue>[^@\\s\"']+)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
@@ -143,8 +143,7 @@
         "docker"
       ],
       "matchFileNames": [
-        "**/*.ya?ml",
-        "**/**/*.ya?ml"
+        "**/action.ya?ml"
       ],
       "matchUpdateTypes": [
         "major",
@@ -157,7 +156,7 @@
       "automerge": false,
       "semanticCommits": "enabled",
       "semanticCommitType": "fix",
-      "semanticCommitScope": "templates"
+      "semanticCommitScope": "actions"
     }
   ]
 }
