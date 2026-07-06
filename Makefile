@@ -1,7 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
-ifneq (,$(wildcard .env))
-	include .env
+# Load Dotenv Files
+
+DOTENV_FILES := $(filter-out %.enc,$(wildcard .env .env.*))
+ifneq ($(strip $(DOTENV_FILES)),)
+	include $(DOTENV_FILES)
 	export
 endif
 
