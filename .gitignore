@@ -4,6 +4,7 @@
 logs/
 *.log
 
+### Dotenv ###
 # Ignore dotenv files (unencrypted), allow encrypted files with .enc
 .env
 .env.*
