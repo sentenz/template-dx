@@ -154,8 +154,8 @@
       "groupSlug": "github-actions-container-images",
       "automerge": false,
       "semanticCommits": "enabled",
-      "semanticCommitType": "fix",
-      "semanticCommitScope": "actions"
+      "semanticCommitType": "ci",
+      "semanticCommitScope": "deps"
     }
   ]
 }
