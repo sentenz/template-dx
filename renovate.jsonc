@@ -5,7 +5,7 @@
   ],
   "rebaseWhen": "auto",
   "minimumReleaseAge": "1 day",
-  "minimumReleaseAgeBehaviour": "timestamp-required",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "internalChecksFilter": "strict",
   "dependencyDashboard": true,
   "prHourlyLimit": 0,
