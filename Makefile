@@ -124,7 +124,7 @@ dependency-renovate-update:
 
 # ── Secrets Manager ──────────────────────────────────────────────────────────────────────────────
 
-SECRETS_IMAGE_SOPS ?= ghcr.io/getsops/sops:v3.13.1@sha256:320f253aced1393537b1e90c77eb48295204d805d4c68933264cd1285192465d
+SECRETS_IMAGE_SOPS ?= ghcr.io/getsops/sops:v3.13.2@sha256:0bc8915bce25ea3bf0f3e27a74cb5ad092488e6e5245af384816d628ed7fd426
 SECRETS_SOPS_UID ?= sops-dx
 
 # Usage: make secrets-gpg-generate SECRETS_SOPS_UID=<uid>
