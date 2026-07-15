@@ -1,34 +1,57 @@
 {
+  // Workspace recommendations must use publisher.extension identifiers.
+  // Version-qualified identifiers are not supported in this file.
+  // Pin approved versions with the organization-level extensions.allowed setting
+  // or the AllowedExtensions enterprise policy.
+  // https://code.visualstudio.com/docs/enterprise/extensions#_configure-allowed-extensions
   "recommendations": [
+    // Build and shell tooling
     "ms-vscode.makefile-tools",
     "ms-vscode.powershell",
+    "timonwong.shellcheck",
+    "foxundermoon.shell-format",
+
+    // Python development
     "ms-python.python",
     "ms-python.debugpy",
     "ms-python.pylint",
     "ms-python.vscode-pylance",
     "ms-python.black-formatter",
+
+    // Remote development
     "ms-vscode-remote.remote-ssh",
     "ms-vscode-remote.remote-containers",
     "ms-vscode.remote-server",
     "ms-vscode.remote-explorer",
     "ms-vscode-remote.remote-wsl",
+
+    // Containers and orchestration
     "ms-kubernetes-tools.vscode-kubernetes-tools",
     "ms-azuretools.vscode-containers",
-    "ms-azuretools.vscode-docker",
-    "github.vscode-github-actions",
     "docker.docker",
-    "redhat.vscode-yaml",
-    "sonarsource.sonarlint-vscode",
-    "editorconfig.editorconfig",
+
+    // Source control and CI
+    "github.vscode-github-actions",
     "vivaxy.vscode-conventional-commits",
-    "esbenp.prettier-vscode",
-    "timonwong.shellcheck",
-    "foxundermoon.shell-format",
+
+    // Configuration, policy, and analysis
+    "redhat.vscode-yaml",
     "zainchen.json",
+    "tsandall.opa",
+    "editorconfig.editorconfig",
+    "sonarsource.sonarlint-vscode",
+
+    // Formatting and documentation
+    "esbenp.prettier-vscode",
     "yzhang.markdown-all-in-one",
     "davidanson.vscode-markdownlint",
-    "alefragnani.project-manager",
-    "tsandall.opa",
-    "mermaidchart.vscode-mermaid-chart"
+    "mermaidchart.vscode-mermaid-chart",
+
+    // Workspace management
+    "alefragnani.project-manager"
+  ],
+  "unwantedRecommendations": [
+    // The Docker extension is now a wrapper around Container Tools.
+    "ms-azuretools.vscode-docker"
   ]
 }
