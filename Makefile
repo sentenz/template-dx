@@ -113,7 +113,7 @@ skills-agent-update:
 
 # ── Dependency Manager ───────────────────────────────────────────────────────────────────────────
 
-DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:43.257.6@sha256:b0cd5907b164db108666b75b90eacf1f00137b5f6e89f10c4e99a9a7774d09e9
+DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:43.268.4@sha256:ef296dce4dfb2a8b1d0179c4fbfb34eef8b5f1530c4b7bbbd101269aeaaad526
 
 ## Update project dependencies locally using Renovate and generate a report
 dependency-renovate-update:
@@ -274,7 +274,7 @@ policy-conftest-test:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(POLICY_IMAGE_CONFTEST)" test "$(filter-out $@,$(MAKECMDGOALS))" > logs/policy/conftest-report.json 2>&1
 .PHONY: policy-conftest-test
 
-POLICY_IMAGE_REGAL ?= ghcr.io/open-policy-agent/regal:0.41.1@sha256:31cbb4cde63a4191feb42f69844cf32b8e5559df05cd265fcb83b95f608114d5
+POLICY_IMAGE_REGAL ?= ghcr.io/open-policy-agent/regal:0.42.0@sha256:07984036043f772a1f921bd0ad9045b8bd9dc58460a1d76f476c458dc8a98b16
 
 # Usage: make policy-regal-lint <filepath>
 #
@@ -304,7 +304,7 @@ lint-markdown:
 
 # ── SAST Manager ─────────────────────────────────────────────────────────────────────────────────
 
-SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.169.0@sha256:2b33f46ba66cf8cc2ad59ccfa7d22951fd00c632c38f1339e84ec8e6e641a942
+SAST_IMAGE_SEMGREP ?= semgrep/semgrep:1.170.0@sha256:c98f8829eea377274ee4b10656458b078b88232469b2ff913f091c2317347c9d
 SAST_FILES_SEMGREP ?= .
 SAST_REGEX_SEMGREP = $(if $(strip $(SAST_FILES_SEMGREP)),$(SAST_FILES_SEMGREP),.)
 
