@@ -11,10 +11,17 @@ logs/
 !.env.enc
 !.env.*.enc
 
-
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+### Certificates ###
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.priv
