@@ -562,7 +562,6 @@ sast-cosign-verify:
 	docker run --rm -v "${HOME}/.docker/config.json:/root/.docker/config.json" -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_COSIGN)" verify-attestation --key cosign.pub --type cyclonedx "$(filter-out $@,$(MAKECMDGOALS))" > logs/sbom/sbom.cdx.intoto.jsonl 2> logs/sast/cosign-verify.log
 .PHONY: sast-cosign-verify
 
-
 # ── Static Site Generator (SSG) ─────────────────────────────────────────────────────────────────
 
 ### Setup documentation pages with MkDocs
