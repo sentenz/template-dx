@@ -51,9 +51,9 @@ A Development Experience (DX) template providing a structured framework and esse
       make <task>
       ```
 
-## 2. Contribute
+## 2. Contribution 
 
-[CONTRIBUTING.md](CONTRIBUTING.md) provides guidens and instructions for contributing to the project.
+[CONTRIBUTING.md](CONTRIBUTING.md) provides guidance and instructions for contributing to the project.
 
 - [AI Agents](CONTRIBUTING.md#1-ai-agents)
   > Automated tools that assist in various development tasks such as code generation, testing, and documentation.
