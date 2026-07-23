@@ -7,7 +7,7 @@ A Development Experience (DX) template providing a structured framework and esse
 - [1. Details](#1-details)
   - [1.1. Prerequisites](#11-prerequisites)
   - [1.2. Usage](#12-usage)
-- [2. Contribute](#2-contribute)
+- [2. Contribution](#2-contribution)
 - [3. Troubleshoot](#3-troubleshoot)
   - [3.1. TODO](#31-todo)
 - [4. References](#4-references)
