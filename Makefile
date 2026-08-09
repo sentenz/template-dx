@@ -113,7 +113,7 @@ skills-agent-update:
 
 # ── Dependency Manager ───────────────────────────────────────────────────────────────────────────
 
-DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:44.5.0@sha256:f4deb31a89607be6df150d412408d7957568c057ff66cbc1e6f3a5c519345167
+DEPENDENCY_IMAGE_RENOVATE ?= docker.io/renovate/renovate:44.14.7@sha256:64775eb3b7fc6822f6877bfd43d39eb4af6e3334c116160852704da2c219fe81
 
 ## Update project dependencies locally using Renovate and generate a report
 dependency-renovate-update:
@@ -258,7 +258,7 @@ secrets-sops-view:
 
 # ── Policy Manager ───────────────────────────────────────────────────────────────────────────────
 
-POLICY_IMAGE_CONFTEST ?= docker.io/openpolicyagent/conftest:v0.68.2@sha256:5fd81e332d7e4bc01daf3ef35371800a9a9720a30c0c37a78de0c5fbe4b6d622
+POLICY_IMAGE_CONFTEST ?= docker.io/openpolicyagent/conftest:v0.69.0@sha256:a38ba21668929a00dce2fe6ee43d1312228340bce5fd243f47dd0ce90516e558
 
 # Usage: make policy-conftest-test <filepath>
 #
@@ -315,7 +315,7 @@ sast-semgrep-scan:
 	docker run --rm -v "${PWD}:/workspace" -w /workspace "$(SAST_IMAGE_SEMGREP)" semgrep scan --config auto --error --json --output logs/sast/semgrep.json $(SAST_REGEX_SEMGREP) 2> logs/sast/semgrep.log
 .PHONY: sast-semgrep-scan
 
-SAST_IMAGE_TRIVY ?= aquasec/trivy:0.72.0@sha256:cffe3f5161a47a6823fbd23d985795b3ed72a4c806da4c4df16266c02accdd6f
+SAST_IMAGE_TRIVY ?= aquasec/trivy:0.73.0@sha256:7cced7cae583819fc7806d4cbc0dbbc7cad18b99f7d3e235192e6da8c091045c
 SAST_FILES_TRIVY ?= .
 
 ## Scan Infrastructure-as-Code (IaC) files for misconfigurations using Trivy and generate a report
