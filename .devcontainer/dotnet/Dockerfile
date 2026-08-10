@@ -1,4 +1,4 @@
-ARG VARIANT=9.0-bookworm-slim
+ARG VARIANT=9.0-bookworm-slim@sha256:2205fd3a7cf5e422c58398a9968aa8b5041fdbb47c76574fe631082e4cbfa2b8
 FROM mcr.microsoft.com/dotnet/sdk:${VARIANT}
 ENV PATH $PATH:/home/vscode/.dotnet:/home/vscode/.dotnet/tools
 
