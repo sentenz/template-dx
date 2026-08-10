@@ -125,12 +125,6 @@
       "matchManagers": [
         "devcontainer"
       ],
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "digest"
-      ],
       "groupName": "devcontainer dependencies",
       "groupSlug": "devcontainer-dependencies",
       "semanticCommits": "enabled",
