@@ -23,10 +23,10 @@ db:
   skip-update: false
 debug: false
 dependency-tree: false
-exit-code: 0
+exit-code: 1
 exit-on-eol: 0
 ignore-policy: ""
-ignorefile: .trivyignore
+ignorefile: .trivyignore.yaml
 image:
   docker:
     host: ""
