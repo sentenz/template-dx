@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.2](https://github.com/sentenz/template-dx/compare/1.6.1...1.6.2) (2026-09-13)
+
+### Bug Fixes
+
+* update variable names in lefthook.yml for consistency with Makefile ([42bc2ea](https://github.com/sentenz/template-dx/commit/42bc2ea7874441d86e649ce46a998a42fb78db70))
+
 ## [1.6.1](https://github.com/sentenz/template-dx/compare/1.6.0...1.6.1) (2026-09-13)
 
 ### Bug Fixes
