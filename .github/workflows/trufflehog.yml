@@ -8,6 +8,8 @@ on:
       - main
   pull_request:
 
+permissions: {}
+
 jobs:
   trufflehog:
     name: TruffleHog Action
