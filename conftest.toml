@@ -2,4 +2,5 @@ policy = "tests/policy"
 namespace = "tests.policy"
 no_color = true
 output = "json"
-ignore = ".git/|.devcontainer/|.vscode/|build/|vendor/|logs/|CODEOWNERS|LICENSE"
+# SOPS-encrypted environment files contain JSON, not dotenv input.
+ignore = '.git/|.devcontainer/|.vscode/|build/|vendor/|logs/|CODEOWNERS|LICENSE|(^|/)\.env(\.[^/]+)?\.enc$'
