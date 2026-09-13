@@ -10,7 +10,8 @@ on:
       - "**/*.yaml"
       - "**/*.yml"
       - "**/*.json"
-      - "policy/**"
+      - "**/*.toml"
+      - "tests/policy/**"
   pull_request:
     branches:
       - main
@@ -18,7 +19,8 @@ on:
       - "**/*.yaml"
       - "**/*.yml"
       - "**/*.json"
-      - "**/policy/**"
+      - "**/*.toml"
+      - "tests/policy/**"
 
 permissions: {}
 
