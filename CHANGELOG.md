@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.6.1](https://github.com/sentenz/template-dx/compare/1.6.0...1.6.1) (2026-09-13)
+
+### Bug Fixes
+
+* **ci:** restore policy scans and release workflow permissions ([#86](https://github.com/sentenz/template-dx/issues/86)) ([5ca7743](https://github.com/sentenz/template-dx/commit/5ca7743807e9be5104a0ec76c8a4b56c60c6e914))
+* **ci:** update GitHub workflows for improved functionality and consistency ([83e7d7a](https://github.com/sentenz/template-dx/commit/83e7d7aefecaa0aa9f186a302c05d70bbb75e33e))
+
+### Reverts
+
+* undo container registry changes in Makefile ([7745156](https://github.com/sentenz/template-dx/commit/77451560807ec76b0620a55683f2e0b0c898f1b9))
+
 # [1.6.0](https://github.com/sentenz/template-dx/compare/1.5.0...1.6.0) (2026-05-10)
 
 
