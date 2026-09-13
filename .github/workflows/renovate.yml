@@ -5,23 +5,34 @@ name: Renovate
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 18 * * 6"
+    - cron: "0 4 * * 0"
+
+concurrency:
+  group: renovate-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
 
 jobs:
   renovate:
     name: Renovate Action
-    runs-on: ubuntu-latest
-
     permissions:
       contents: read
-
+    # Never expose the maintenance token to a manually selected feature branch.
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Renovate
+      - name: Run Renovate
         uses: sentenz/actions/renovate@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
+          autodiscover: "false"
+          log-level: info
         env:
           RENOVATE_CONFIG_VALIDATION_ERROR: "true"

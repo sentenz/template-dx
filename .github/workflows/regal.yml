@@ -6,15 +6,27 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "**/*.rego"
   pull_request:
+    branches:
+      - main
+    paths:
+      - "**/*.rego"
+
+permissions: {}
 
 jobs:
   regal:
     name: Regal Action
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Run Regal
         uses: sentenz/actions/regal@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8

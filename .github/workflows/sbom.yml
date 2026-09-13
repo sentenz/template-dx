@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: Apache-2.0
+
+name: SBOM
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Git tag to generate and publish SBOMs for
+        required: true
+        type: string
+
+jobs:
+  sbom:
+    name: SBOM Action
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.version }}
+          persist-credentials: false
+
+      - name: Generate SBOM (CycloneDX)
+        uses: sentenz/actions/trivy@ed8d725668082b21a56c2d043b6c7b32b5da1c63 # 1.4.5
+        with:
+          scan-type: sbom-generate
+          scan-target: "."
+          format: cyclonedx
+          output: sbom.cdx.json
+
+      - name: Generate SBOM (SPDX)
+        uses: sentenz/actions/trivy@ed8d725668082b21a56c2d043b6c7b32b5da1c63 # 1.4.5
+        with:
+          scan-type: sbom-generate
+          scan-target: "."
+          format: spdx-json
+          output: sbom.spdx.json
+
+      - name: Scan SBOM (SPDX)
+        uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
+        with:
+          scan-type: sbom
+          scan-target: sbom.spdx.json
+        continue-on-error: false
+
+      - name: Scan SBOM (CycloneDX)
+        uses: sentenz/actions/trivy@48302ad4cbb2e77116d2666bbad2821e74dd5ada # 1.4.8
+        with:
+          scan-type: sbom
+          scan-target: sbom.cdx.json
+        continue-on-error: false
+
+      - name: Publish SBOM Artifacts
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
+        with:
+          tag_name: ${{ inputs.version }}
+          files: |
+            sbom.cdx.json
+            sbom.spdx.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 name: Dependabot Auto-Merge
 
 on:
@@ -7,15 +9,25 @@ on:
       - synchronize
       - reopened
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   auto-merge:
-    name: Auto-merge Dependabot Patch and Minor Updates
+    name: Auto-merge Dependabot patch updates
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    timeout-minutes: 5
+    # Verify the PR's origin, not only the actor that triggered this run.
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.commits == 1
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Get Dependabot metadata
         id: metadata
@@ -23,20 +35,34 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Auto-merge Patch and Minor Updates
-        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
-        run: |
-          gh pr merge --auto --squash "$PR_URL"
-          echo "Enabled auto-merge for patch/minor update PR #${{ github.event.pull_request.number }}"
+      - name: Approve and enable auto-merge for the verified patch update
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
         env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
 
-      - name: Auto-approve Patch and Minor Updates
-        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
-        run: |
-          gh pr review --approve "$PR_URL"
-          echo "Auto-approved patch/minor update PR #${{ github.event.pull_request.number }}"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # fetch-metadata verifies the first commit; require it to be the entire PR.
+          current_pr="$(gh api "repos/${GH_REPO}/pulls/${PR_NUMBER}")"
+          if ! jq -e --arg sha "${PR_HEAD_SHA}" \
+            '.state == "open" and .commits == 1 and .head.sha == $sha' \
+            <<< "${current_pr}" > /dev/null; then
+            echo "::notice::PR changed after this run started; skipping approval and auto-merge."
+            exit 0
+          fi
+
+          verified="$(gh api "repos/${GH_REPO}/commits/${PR_HEAD_SHA}" \
+            --jq '.author.login == "dependabot[bot]" and .commit.verification.verified')"
+          if [[ "${verified}" != "true" ]]; then
+            echo "::error::The PR head is not a verified Dependabot commit."
+            exit 1
+          fi
+
+          # Bind approval and merge to the reviewed commit, even if the PR changes again.
+          gh api --method POST "repos/${GH_REPO}/pulls/${PR_NUMBER}/reviews" \
+            -f event=APPROVE -f commit_id="${PR_HEAD_SHA}" > /dev/null
+          gh pr merge --auto --squash --match-head-commit "${PR_HEAD_SHA}" "${PR_NUMBER}"
+          echo "Approved and enabled auto-merge for patch update PR #${PR_NUMBER}"
