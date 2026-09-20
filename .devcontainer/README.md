@@ -8,16 +8,16 @@ The `.devcontainer/` directory contains configuration files for setting up a [De
 ## 1. Dev Containers
 
 - `cpp/`
-  > Develop [C++](https://github.com/devcontainers/images/tree/main/src/cpp) applications on Linux. Includes Debian C++ build tools.
+  > Development environment for [C++](https://github.com/devcontainers/images/tree/main/src/cpp) based applications on Linux. Includes Debian C++ build tools.
 
 - `dotnet/`
-  > Develop [C# and .NET](https://github.com/devcontainers/images/tree/main/src/dotnet) based applications. Includes all needed SDKs, extensions, and dependencies.
+  > Development environment for [C# and .NET](https://github.com/devcontainers/images/tree/main/src/dotnet) based applications. Includes all needed SDKs, extensions, and dependencies.
 
 - `go/`
-  > Develop [Go](https://github.com/devcontainers/images/tree/main/src/go) based applications. Includes appropriate runtime args, Go, common tools, extensions, and dependencies.
+  > Development environment for [Go](https://github.com/devcontainers/images/tree/main/src/go) based applications. Includes appropriate runtime args, Go, common tools, extensions, and dependencies.
 
 - `python/`
-  > Develop [Python 3](https://github.com/devcontainers/images/tree/main/src/python) applications.
+  > Development environment for [Python 3](https://github.com/devcontainers/images/tree/main/src/python) based applications.
 
 > [!NOTE]
 > The `devcontainer.json` runs the `bootstrap` and `setup` tasks to initialize and configure the development environment.
