@@ -45,6 +45,16 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Respect repository policy before attempting approval or auto-merge.
+          auto_merge_enabled="$(gh api "repos/${GH_REPO}" --jq '.allow_auto_merge')"
+          if [[ "${auto_merge_enabled}" == "false" ]]; then
+            echo "::notice::Auto-merge is disabled for this repository; skipping approval and auto-merge."
+            exit 0
+          elif [[ "${auto_merge_enabled}" != "true" ]]; then
+            echo "::error::Unable to determine the repository auto-merge policy."
+            exit 1
+          fi
+
           # fetch-metadata verifies the first commit; require it to be the entire PR.
           current_pr="$(gh api "repos/${GH_REPO}/pulls/${PR_NUMBER}")"
           if ! jq -e --arg sha "${PR_HEAD_SHA}" \
