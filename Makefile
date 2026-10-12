@@ -312,7 +312,7 @@ policy-regal-lint:
 
 # ─── Static Analysis ─────────────────────────────────────────────────────────────────────────────
 
-LINT_MARKDOWNLINT_IMAGE ?= davidanson/markdownlint-cli2:0.22.1@sha256:0ed9a5f4c77ef447da2a2ac6e67caf74b214a7f80288819565e8b7d2ac148fe5
+LINT_MARKDOWNLINT_IMAGE ?= davidanson/markdownlint-cli2:v0.22.1@sha256:0ed9a5f4c77ef447da2a2ac6e67caf74b214a7f80288819565e8b7d2ac148fe5
 LINT_MARKDOWNLINT_FILES ?= "**/*.md"
 
 ## Lint Markdown files using markdownlint and generate a report
