@@ -1,4 +1,4 @@
-ARG VARIANT=1.26-trixie@sha256:11d3db669d169f42fb22ba143f3b676df84f8de20588906a1d2c331c960b1b60
+ARG VARIANT=1.27-trixie@sha256:47667934874913a449b96faa7ef4777fa285d9ec29126ee80ed61c45b7cccf0e
 FROM golang:${VARIANT}
 
 # Fixing vulnerability issue by upgrading svn to 1.14.5. Ref https://subversion.apache.org/security/CVE-2024-46901-advisory.txt
