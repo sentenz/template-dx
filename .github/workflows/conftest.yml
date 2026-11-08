@@ -37,7 +37,7 @@ jobs:
           persist-credentials: false
 
       - name: Run Conftest
-        uses: sentenz/actions/conftest@7eb0decd5ee41c0ef933860135d8033a8bdf24b7 # 1.5.4
+        uses: sentenz/actions/conftest@4e9e78d246486ad62d8df160a4d07020ece9668a # 1.5.6
         with:
           policy-path: "./tests/policy"
           config-file: "./conftest.toml"

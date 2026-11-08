@@ -26,7 +26,7 @@ jobs:
           persist-credentials: false
 
       - name: Run Semgrep
-        uses: sentenz/actions/semgrep@7eb0decd5ee41c0ef933860135d8033a8bdf24b7 # 1.5.4
+        uses: sentenz/actions/semgrep@4e9e78d246486ad62d8df160a4d07020ece9668a # 1.5.6
         with:
           config: "auto"
           metrics: "auto"
@@ -35,6 +35,6 @@ jobs:
 
       - name: Upload SARIF results
         if: always()
-        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         with:
           sarif_file: semgrep-results.sarif
