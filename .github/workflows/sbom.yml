@@ -25,7 +25,7 @@ jobs:
           persist-credentials: false
 
       - name: Generate SBOM (CycloneDX)
-        uses: sentenz/actions/trivy@7eb0decd5ee41c0ef933860135d8033a8bdf24b7 # 1.5.4
+        uses: sentenz/actions/trivy@4e9e78d246486ad62d8df160a4d07020ece9668a # 1.5.6
         with:
           scan-type: sbom-generate
           scan-target: "."
@@ -33,7 +33,7 @@ jobs:
           output: sbom.cdx.json
 
       - name: Generate SBOM (SPDX)
-        uses: sentenz/actions/trivy@7eb0decd5ee41c0ef933860135d8033a8bdf24b7 # 1.5.4
+        uses: sentenz/actions/trivy@4e9e78d246486ad62d8df160a4d07020ece9668a # 1.5.6
         with:
           scan-type: sbom-generate
           scan-target: "."
@@ -41,21 +41,21 @@ jobs:
           output: sbom.spdx.json
 
       - name: Scan SBOM (SPDX)
-        uses: sentenz/actions/trivy@7eb0decd5ee41c0ef933860135d8033a8bdf24b7 # 1.5.4
+        uses: sentenz/actions/trivy@4e9e78d246486ad62d8df160a4d07020ece9668a # 1.5.6
         with:
           scan-type: sbom
           scan-target: sbom.spdx.json
         continue-on-error: false
 
       - name: Scan SBOM (CycloneDX)
-        uses: sentenz/actions/trivy@7eb0decd5ee41c0ef933860135d8033a8bdf24b7 # 1.5.4
+        uses: sentenz/actions/trivy@4e9e78d246486ad62d8df160a4d07020ece9668a # 1.5.6
         with:
           scan-type: sbom
           scan-target: sbom.cdx.json
         continue-on-error: false
 
       - name: Publish SBOM Artifacts
-        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
         with:
           tag_name: ${{ inputs.version }}
           files: |
